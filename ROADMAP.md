@@ -1,6 +1,16 @@
 # Roadmap
 
-Ideas and planned improvements for future versions. Not in any particular order — priority will be driven by what makes the reports more useful for product managers.
+Planned improvements in priority order. Each phase depends on the one before it.
+
+## Phases
+
+| Phase | Focus | Gate |
+|---|---|---|
+| **1 — Leaner and faster** | Parallel downloads, parallel transcription, smaller audio files | Makes large channels practical on any machine |
+| **2 — Data quality** | Transcript frontmatter, cleaning, labeling | Transcripts become trustworthy standalone artifacts |
+| **3 — Podcasts and RSS** | Ingest audio beyond YouTube | Doubles the signal surface without changing the output |
+| **4 — Vector database** | Embed transcripts and insights for semantic search | Turns the corpus into a queryable research database |
+| **5 — Streamlit UI** | Visual exploration and Q&A across captured companies | Requires Phase 4 — the UI is a front-end to the vector store |
 
 ---
 
@@ -130,3 +140,32 @@ url: https://www.youtube.com/watch?v=dQw4w9WgXcQ
 - Highlight: same problem framing (convergent market belief), opposite category framing (direct competitive tension), or one company saying what the other isn't
 
 **Why it matters:** This is the original reason the canvas schema uses fixed section keys. Once two canvases exist, comparison is essentially a prompt away.
+
+---
+
+## Streamlit exploration UI *(Phase 5 — requires vector database)*
+
+**What:** A lightweight web interface that lets a PM explore everything they've captured — transcripts, insights, and canvas sections — through natural language questions and visual navigation. No terminal required once it's running.
+
+**Two modes:**
+
+*Channel mode* — focused on a single company:
+- Browse the canvas sections interactively (click into any claim to see all supporting evidence)
+- Ask free-form questions: "What has this company said about enterprise customers?" or "Show me every time they mention pricing"
+- Timeline view of how messaging has shifted across the capture window
+- Jump from insight to source transcript in one click
+
+*Corpus mode* — across all captured companies:
+- Ask questions that span the full database: "Which of my companies mention AI most often?" or "Where do these companies agree on customer problems?"
+- Side-by-side canvas comparison (builds on the comparison mode above)
+- Gap analysis: "What is everyone in this space not saying?"
+
+**How it would work:**
+- Built with Streamlit — Python only, no frontend knowledge required, runs locally
+- Reads from the vector database (Phase 4) for semantic search
+- Reads from canvas JSON files for structured section navigation
+- New command to launch: `python3 app.py` — opens in the browser automatically
+
+**Dependencies:** Phase 4 (vector database) must be complete first. The UI is a front-end to the vector store and canvas files — it doesn't generate new intelligence, it makes the captured intelligence explorable.
+
+**Why it matters:** Right now the only output is a markdown report. A PM with five companies captured has five reports and no way to ask questions across them. The Streamlit UI turns the accumulated corpus into a research tool — the more companies you've captured, the more valuable it becomes.
