@@ -12,22 +12,9 @@ Three time horizons. Each builds on the one before it.
 
 ## Now — Speed & Size Optimization
 
-### Parallel downloads and transcription
+### Smaller audio files *(do this first)*
 
-**What:** Downloads and transcription currently run one video at a time, sequentially. Both phases could run multiple jobs at once.
-
-**How it would work:**
-- Download phase: use `concurrent.futures.ThreadPoolExecutor` to run multiple `yt-dlp` processes simultaneously (3–5 at a time without hitting rate limits)
-- Transcription phase: run multiple `whisper` processes in parallel (limited by CPU/RAM — each whisper process is heavy)
-- DB writes need a lock to stay thread-safe under concurrent access
-
-**Why it matters:** A 50-video channel that takes 60 minutes to transcribe could finish in 15–20 minutes with parallel whisper jobs on a modern machine.
-
----
-
-### Smaller audio files
-
-**What:** Whisper only needs 16kHz mono audio to transcribe accurately. We're currently storing stereo m4a files at full quality — 4–6× larger than necessary.
+**What:** Whisper only needs 16kHz mono audio to transcribe accurately. We're currently storing stereo m4a files at full quality — 4–6× larger than necessary. Shrink the files first so that parallel jobs are processing lean data, not bloated originals.
 
 **How it would work:**
 - Add an `ffmpeg` post-processing step after download to convert to 16kHz mono mp3 or wav
@@ -35,7 +22,20 @@ Three time horizons. Each builds on the one before it.
 - Target: ~24–48 kbps mono instead of 128–192 kbps stereo
 - Expected storage reduction: 60–75% per file
 
-**Why it matters:** A 50-video channel currently uses 2–4 GB. With this change it drops to 500 MB–1 GB. Makes the tool practical on machines with limited storage.
+**Why it matters:** A 50-video channel currently uses 2–4 GB. With this change it drops to 500 MB–1 GB. There's no point spinning up parallel whisper jobs if each one is chewing through 80 MB files instead of 20 MB files — get the file size right first, then parallelize.
+
+---
+
+### Parallel downloads and transcription *(do this second)*
+
+**What:** Downloads and transcription currently run one video at a time, sequentially. Both phases could run multiple jobs at once. Do this after smaller audio files so parallelism compounds the storage and speed gains.
+
+**How it would work:**
+- Download phase: use `concurrent.futures.ThreadPoolExecutor` to run multiple `yt-dlp` processes simultaneously (3–5 at a time without hitting rate limits)
+- Transcription phase: run multiple `whisper` processes in parallel (limited by CPU/RAM — each whisper process is heavy)
+- DB writes need a lock to stay thread-safe under concurrent access
+
+**Why it matters:** A 50-video channel that takes 60 minutes to transcribe could finish in 15–20 minutes with parallel whisper jobs — and those gains compound when the files are already lean from the step above.
 
 ---
 
