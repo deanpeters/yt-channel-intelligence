@@ -19,7 +19,7 @@ There are four things to do before you can run your first report:
 
 Go to the GitHub repository and click the green **Code** button, then **Download ZIP**.
 
-Unzip the file. Move the resulting folder (`yt-dlp-channel`) somewhere you'll remember — your Desktop or Documents folder works well.
+Unzip the file. Move the resulting folder (`yt-channel-intelligence`) somewhere you'll remember — your Desktop or Documents folder works well.
 
 ---
 
@@ -98,12 +98,12 @@ If you put the folder on your Desktop:
 
 Mac:
 ```
-cd ~/Desktop/yt-dlp-channel
+cd ~/Desktop/yt-channel-intelligence
 ```
 
 Windows:
 ```
-cd %USERPROFILE%\Desktop\yt-dlp-channel
+cd %USERPROFILE%\Desktop\yt-channel-intelligence
 ```
 
 **Run the setup script:**

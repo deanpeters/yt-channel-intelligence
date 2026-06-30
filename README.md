@@ -30,7 +30,7 @@ Every claim is anchored to a verbatim quote and the video it came from. The "Wha
 ## What you need
 
 - A Mac or Windows PC
-- A free OpenAI account with an API key — [get one here](https://platform.openai.com/api-keys)
+- An OpenAI API key — the tool uses OpenAI's `gpt-4o-mini` to read transcripts and generate your report. [Get one here](https://platform.openai.com/api-keys).
 - About 30–90 minutes for a first run (mostly unattended — the tool does the work)
 
 That's it. The setup script installs everything else.
@@ -55,12 +55,12 @@ In the terminal, navigate to the folder you just downloaded. If you put it on yo
 
 **Mac:**
 ```
-cd ~/Desktop/yt-dlp-channel
+cd ~/Desktop/yt-channel-intelligence
 ```
 
 **Windows:**
 ```
-cd %USERPROFILE%\Desktop\yt-dlp-channel
+cd %USERPROFILE%\Desktop\yt-channel-intelligence
 ```
 
 ### Step 3 — Run the setup script
@@ -87,23 +87,25 @@ The setup script will tell you how to save your key so you don't have to enter i
 
 ## Running it
 
-Once setup is done, run the tool with any public YouTube channel URL:
+Once setup is done, run the tool with any public YouTube channel URL. All of these formats work:
 
 ```
+# A channel's video tab (most common)
 python3 agent.py https://www.youtube.com/@CompanyName/videos
+
+# The channel root — same result as /videos
+python3 agent.py https://www.youtube.com/@CompanyName
+
+# A courses tab
+python3 agent.py https://www.youtube.com/@CompanyName/courses
+
+# A specific playlist
+python3 agent.py https://www.youtube.com/playlist?list=PLxxxxxxxxxxxxxxx
 ```
 
-Replace the URL with the channel you want to analyze. The tool accepts any standard YouTube channel URL.
+On Windows, use `python` instead of `python3`.
 
-**Mac example:**
-```
-python3 agent.py https://www.youtube.com/@productside/videos
-```
-
-**Windows example:**
-```
-python agent.py https://www.youtube.com/@productside/videos
-```
+Each URL produces a separate report and workspace, so you can run multiple channels without them interfering with each other.
 
 You'll see progress as it works:
 
@@ -158,6 +160,7 @@ Each company is tracked separately. Run the tool with a different URL and it cre
 ```
 python3 agent.py https://www.youtube.com/@CompanyA/videos
 python3 agent.py https://www.youtube.com/@CompanyB/videos
+python3 agent.py https://www.youtube.com/playlist?list=PLxxxxxxxxxxxxxxx
 ```
 
 ---

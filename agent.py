@@ -2,17 +2,23 @@
 import argparse
 import re
 import sys
-from urllib.parse import urlparse
+from urllib.parse import urlparse, parse_qs
 
 import db
 from phases import discover, download, transcribe, synthesize
 
 
-_YT_TAB_SUFFIXES = ("/videos", "/shorts", "/live", "/playlists", "/community", "/about", "/featured")
+_YT_TAB_SUFFIXES = ("/videos", "/shorts", "/live", "/playlists", "/courses", "/community", "/about", "/featured")
 
 
 def _slug_from_url(url: str) -> str:
-    path = urlparse(url).path.rstrip("/")
+    parsed = urlparse(url)
+    # Playlist URLs: use the playlist ID so each playlist gets a unique slug
+    qs = parse_qs(parsed.query)
+    if "list" in qs:
+        playlist_id = qs["list"][0]
+        return re.sub(r"[^a-z0-9]+", "-", playlist_id.lower()).strip("-") or "playlist"
+    path = parsed.path.rstrip("/")
     for suffix in _YT_TAB_SUFFIXES:
         if path.endswith(suffix):
             path = path[: -len(suffix)]
