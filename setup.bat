@@ -80,14 +80,30 @@ if %errorlevel% equ 0 (
 
 :: ── Python packages ────────────────────────────────────────────────────────
 echo.
-echo [Installing Python packages - openai and openai-whisper]
-%PYTHON% -m pip install --quiet openai openai-whisper
+echo [Installing Python packages - litellm, openai, and openai-whisper]
+%PYTHON% -m pip install --quiet litellm openai openai-whisper
 if %errorlevel% neq 0 (
     echo   [X]  Package install failed.
-    echo        Try running:  pip install openai openai-whisper
+    echo        Try running:  pip install litellm openai openai-whisper
     set /a ERRORS+=1
 ) else (
-    echo   [OK] openai and openai-whisper installed
+    echo   [OK] litellm, openai, and openai-whisper installed
+)
+
+:: Install provider SDK if LLM_MODEL is set to a non-OpenAI provider
+if not "%LLM_MODEL%"=="" (
+    echo %LLM_MODEL% | findstr /b "anthropic/" >nul 2>&1
+    if %errorlevel% equ 0 (
+        echo        LLM_MODEL is Anthropic -- installing anthropic SDK...
+        %PYTHON% -m pip install --quiet anthropic
+        if %errorlevel% equ 0 (echo   [OK] anthropic installed) else (echo   [!]  anthropic install failed. Run: pip install anthropic)
+    )
+    echo %LLM_MODEL% | findstr /b "gemini/" >nul 2>&1
+    if %errorlevel% equ 0 (
+        echo        LLM_MODEL is Google -- installing google-genai SDK...
+        %PYTHON% -m pip install --quiet google-genai
+        if %errorlevel% equ 0 (echo   [OK] google-genai installed) else (echo   [!]  google-genai install failed. Run: pip install google-genai)
+    )
 )
 
 :: ── ffmpeg ─────────────────────────────────────────────────────────────────
@@ -117,10 +133,55 @@ if %errorlevel% equ 0 (
     set /a ERRORS+=1
 )
 
-:: ── OPENAI_API_KEY ─────────────────────────────────────────────────────────
+:: ── API key check (provider-aware) ─────────────────────────────────────────
 :api_key
 echo.
-echo [Checking your OpenAI API key]
+echo [Checking your AI provider API key]
+
+set _MODEL=%LLM_MODEL%
+if "%_MODEL%"=="" set _MODEL=gpt-4o-mini
+
+echo %_MODEL% | findstr /b "anthropic/" >nul 2>&1
+if %errorlevel% equ 0 (
+    if "%ANTHROPIC_API_KEY%"=="" (
+        echo   [X]  ANTHROPIC_API_KEY is not set.
+        echo        Get a key at: https://console.anthropic.com/
+        echo        Set it in System Environment Variables as ANTHROPIC_API_KEY
+        set /a ERRORS+=1
+    ) else (
+        echo   [OK] ANTHROPIC_API_KEY is set (Anthropic provider^)
+    )
+    goto :create_dirs
+)
+
+echo %_MODEL% | findstr /b "gemini/" >nul 2>&1
+if %errorlevel% equ 0 (
+    if "%GEMINI_API_KEY%"=="" (
+        echo   [X]  GEMINI_API_KEY is not set.
+        echo        Get a key at: https://aistudio.google.com/apikey
+        echo        Set it in System Environment Variables as GEMINI_API_KEY
+        set /a ERRORS+=1
+    ) else (
+        echo   [OK] GEMINI_API_KEY is set (Google provider^)
+    )
+    goto :create_dirs
+)
+
+echo %_MODEL% | findstr /b "ollama/" >nul 2>&1
+if %errorlevel% equ 0 (
+    curl -s http://localhost:11434 >nul 2>&1
+    if %errorlevel% equ 0 (
+        echo   [OK] Ollama is running locally (no API key needed^)
+    ) else (
+        echo   [X]  Ollama does not appear to be running.
+        echo        Download it at: https://ollama.com
+        echo        Then run: ollama pull llama3.2
+        set /a ERRORS+=1
+    )
+    goto :create_dirs
+)
+
+:: Default: OpenAI
 if "%OPENAI_API_KEY%"=="" (
     echo   [X]  OPENAI_API_KEY is not set.
     echo.
@@ -137,13 +198,15 @@ if "%OPENAI_API_KEY%"=="" (
     echo        6. Click OK on all windows
     echo        7. Close and reopen this terminal
     echo.
-    echo        Then re-run this script to confirm it's working.
+    echo        To use a different provider instead, set LLM_MODEL before
+    echo        re-running. See SETUP.md for all provider options.
     set /a ERRORS+=1
 ) else (
-    echo   [OK] OPENAI_API_KEY is set
+    echo   [OK] OPENAI_API_KEY is set (OpenAI provider^)
 )
 
 :: ── Create reports directory ───────────────────────────────────────────────
+:create_dirs
 if not exist reports mkdir reports
 
 :: ── Summary ────────────────────────────────────────────────────────────────

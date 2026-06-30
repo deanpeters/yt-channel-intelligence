@@ -30,7 +30,7 @@ Every claim is anchored to a verbatim quote and the video it came from. The "Wha
 ## What you need
 
 - A Mac or Windows PC
-- An OpenAI API key — the tool uses OpenAI's `gpt-4o-mini` to read transcripts and generate your report. [Get one here](https://platform.openai.com/api-keys).
+- An API key for your AI provider — the tool uses an LLM to read transcripts and generate your report. It defaults to OpenAI's `gpt-4o-mini`, but also works with Anthropic, Google Gemini, or a local model via [Ollama](https://ollama.com) (no key required). See the [Setup Guide](SETUP.md) for all options.
 - About 30–90 minutes for a first run (mostly unattended — the tool does the work)
 
 That's it. The setup script installs everything else.

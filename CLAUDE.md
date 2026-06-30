@@ -88,9 +88,18 @@ All date filters must be computed dynamically from `LOOKBACK_MONTHS` and `dateti
 
 ## LLM provider
 
-**OpenAI only. Never use the Anthropic / Claude API in this project.**
+The tool uses [LiteLLM](https://github.com/BerriAI/litellm) for all LLM calls — a unified wrapper that routes to OpenAI, Anthropic, Google, Ollama, or any other provider based on the `LLM_MODEL` string. No per-provider if/else logic in the code.
 
-`OPENAI_API_KEY` must be sourced from environment variables — never hardcoded in any file. The key is set once at shell level (`~/.zshrc` on Mac, System Environment Variables on Windows) and read at runtime via `os.environ`. Any code that touches LLM calls must use the `openai` Python package with `gpt-4o-mini` as the default model.
+`LLM_MODEL` defaults to `gpt-4o-mini` and can be overridden via environment variable:
+
+| Provider | `LLM_MODEL` | API key env var |
+|---|---|---|
+| OpenAI (default) | `gpt-4o-mini` | `OPENAI_API_KEY` |
+| Anthropic | `anthropic/claude-haiku-4-5` | `ANTHROPIC_API_KEY` |
+| Google | `gemini/gemini-1.5-flash` | `GEMINI_API_KEY` |
+| Ollama (local) | `ollama/llama3.2` | *(none)* |
+
+All secrets must come from environment variables — never hardcoded in any file.
 
 ## Security
 

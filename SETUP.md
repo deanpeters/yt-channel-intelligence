@@ -23,68 +23,101 @@ Unzip the file. Move the resulting folder (`yt-channel-intelligence`) somewhere 
 
 ---
 
-## Step 2 — Get an OpenAI API key
+## Step 2 — Choose your AI provider and get an API key
 
-The tool uses OpenAI's AI to read the video transcripts and write your report. You need an API key to use it. This takes about five minutes.
+The tool uses an LLM to read transcripts and write your report. You can choose which provider to use:
 
-### 2a. Create an OpenAI account
+| Provider | Model | Cost per report | Key required |
+|---|---|---|---|
+| **OpenAI** (default) | `gpt-4o-mini` | ~$0.50–$3.00 | Yes — [platform.openai.com](https://platform.openai.com/api-keys) |
+| **Anthropic** | `anthropic/claude-haiku-4-5` | ~$0.50–$2.00 | Yes — [console.anthropic.com](https://console.anthropic.com/) |
+| **Google** | `gemini/gemini-1.5-flash` | ~$0.10–$1.00 | Yes — [aistudio.google.com](https://aistudio.google.com/apikey) |
+| **Ollama** (local) | `ollama/llama3.2` | Free | No — runs on your machine |
 
-Go to [platform.openai.com](https://platform.openai.com) and click **Sign up**. You can use your Google account or create one with your email address.
+Pick one and follow the instructions for it below. You only need one.
 
-### 2b. Add a payment method
+---
 
-API usage is billed per report (see [What does it cost?](#what-does-it-cost) below — it's inexpensive). Before you can generate a key, OpenAI requires a payment method on file.
+### Option A — OpenAI (default, no extra setup needed)
 
-1. Log in at [platform.openai.com](https://platform.openai.com)
-2. Click your organization name in the top-left corner
-3. Go to **Billing** → **Payment methods**
-4. Click **Add payment method** and enter a credit or debit card
+**2a. Create an account** at [platform.openai.com](https://platform.openai.com). You can sign up with Google or email.
 
-You will not be charged until you actually generate reports. OpenAI only charges for what you use.
+**2b. Add a payment method** — Go to **Billing → Payment methods** and add a card. You're only charged for what you use.
 
-### 2c. Generate an API key
+**2c. Generate an API key** — In the left sidebar, click **API keys → Create new secret key**. Give it a name, click **Create**, and copy the key immediately — it starts with `sk-` and is only shown once.
 
-1. In the left sidebar, click **API keys**
-2. Click **Create new secret key**
-3. Give it a name (e.g., "Channel Intelligence")
-4. Click **Create secret key**
-5. **Copy the key now** — it starts with `sk-` and is about 50 characters long
+**2d. Save the key:**
 
-> **Important:** This is the only time OpenAI shows you the full key. If you close this screen without copying it, you'll need to create a new one. Keep it somewhere safe — treat it like a password.
-
-### 2d. Save your key to your computer
-
-You need to save the key so the tool can find it automatically every time you run it.
-
-**Mac:**
-
-Open Terminal (`Command + Space`, type `Terminal`, press Enter). Run this command — replace `sk-...` with your actual key:
-
+Mac:
 ```
 echo 'export OPENAI_API_KEY="sk-..."' >> ~/.zshrc && source ~/.zshrc
 ```
 
-To confirm it worked:
-```
-echo $OPENAI_API_KEY
-```
-You should see your key printed back. If you see a blank line, try closing Terminal and opening a new window, then check again.
+Windows — add `OPENAI_API_KEY` to your User variables in **System Properties → Environment Variables**.
 
-**Windows:**
+---
 
-1. Press the Windows key, search for **Environment Variables**, click **Edit the system environment variables**
-2. Click the **Environment Variables...** button
-3. Under **User variables**, click **New**
-4. Set **Variable name** to: `OPENAI_API_KEY`
-5. Set **Variable value** to your key (the `sk-...` string)
-6. Click **OK** on all windows
-7. Close Command Prompt and open a new one — the key won't be recognized until you do
+### Option B — Anthropic
 
-To confirm it worked, open a new Command Prompt and run:
+**2a.** Create an account at [console.anthropic.com](https://console.anthropic.com/) and add a payment method under **Billing**.
+
+**2b.** Go to **API Keys → Create Key**, copy it (starts with `sk-ant-`).
+
+**2c.** Save the key AND tell the tool to use Anthropic:
+
+Mac:
 ```
-echo %OPENAI_API_KEY%
+echo 'export ANTHROPIC_API_KEY="sk-ant-..."' >> ~/.zshrc
+echo 'export LLM_MODEL="anthropic/claude-haiku-4-5"' >> ~/.zshrc
+source ~/.zshrc
 ```
-You should see your key printed back.
+
+Windows — add both `ANTHROPIC_API_KEY` and `LLM_MODEL` to your User variables.
+
+---
+
+### Option C — Google Gemini
+
+**2a.** Go to [aistudio.google.com/apikey](https://aistudio.google.com/apikey) and click **Create API key**. Copy it.
+
+**2b.** Save the key AND tell the tool to use Google:
+
+Mac:
+```
+echo 'export GEMINI_API_KEY="AI..."' >> ~/.zshrc
+echo 'export LLM_MODEL="gemini/gemini-1.5-flash"' >> ~/.zshrc
+source ~/.zshrc
+```
+
+Windows — add both `GEMINI_API_KEY` and `LLM_MODEL` to your User variables.
+
+---
+
+### Option D — Ollama (local, free, no API key)
+
+**2a.** Download and install Ollama from [ollama.com](https://ollama.com).
+
+**2b.** Pull a model — in your terminal:
+```
+ollama pull llama3.2
+```
+
+**2c.** Tell the tool to use Ollama:
+
+Mac:
+```
+echo 'export LLM_MODEL="ollama/llama3.2"' >> ~/.zshrc && source ~/.zshrc
+```
+
+Windows — add `LLM_MODEL` set to `ollama/llama3.2` to your User variables.
+
+Make sure Ollama is running before you generate reports. Quality will vary by model — `llama3.2` is a reasonable starting point; larger models produce better results.
+
+---
+
+> **Confirm your key is set (Mac):** Open a new terminal and run `echo $OPENAI_API_KEY` (or the matching variable for your provider). You should see the key printed back.
+>
+> **Confirm your key is set (Windows):** Open a new Command Prompt and run `echo %OPENAI_API_KEY%` (or the matching variable).
 
 ---
 

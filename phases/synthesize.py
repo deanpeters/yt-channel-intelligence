@@ -1,15 +1,21 @@
 import json
 import os
+import re
 from datetime import datetime
 
-from openai import OpenAI
+import litellm
 
 import db
-from config import DATA_DIR, LLM_MODEL, LOOKBACK_MONTHS, OPENAI_API_KEY, REPORTS_DIR
-
-_client = OpenAI(api_key=OPENAI_API_KEY)
+from config import DATA_DIR, LLM_MODEL, LOOKBACK_MONTHS, REPORTS_DIR
 
 _TRANSCRIPT_CHAR_LIMIT = 25_000
+
+
+def _extract_json(text: str) -> str:
+    """Strip markdown code fences that some models wrap around JSON output."""
+    text = text.strip()
+    match = re.search(r"```(?:json)?\s*([\s\S]*?)\s*```", text)
+    return match.group(1) if match else text
 
 _SECTION_ORDER = [
     "product_line",
@@ -169,7 +175,7 @@ def _pass1_analyze(conn) -> None:
             continue
 
         try:
-            response = _client.chat.completions.create(
+            response = litellm.completion(
                 model=LLM_MODEL,
                 messages=[
                     {"role": "system", "content": _PASS1_SYSTEM},
@@ -183,7 +189,7 @@ def _pass1_analyze(conn) -> None:
                 ],
                 response_format={"type": "json_object"},
             )
-            summary_json = response.choices[0].message.content
+            summary_json = _extract_json(response.choices[0].message.content)
             json.loads(summary_json)  # validate before storing
         except Exception as e:
             print(f"  Skipping {video_id}: {e}")
@@ -213,7 +219,7 @@ def _pass2_synthesize(company_slug: str, conn) -> str:
 
     print(f"Synthesizing report from {len(rows)} video(s)...")
 
-    response = _client.chat.completions.create(
+    response = litellm.completion(
         model=LLM_MODEL,
         messages=[
             {"role": "system", "content": _PASS2_SYSTEM},
@@ -229,7 +235,7 @@ def _pass2_synthesize(company_slug: str, conn) -> str:
         response_format={"type": "json_object"},
     )
 
-    canvas_data = json.loads(response.choices[0].message.content)
+    canvas_data = json.loads(_extract_json(response.choices[0].message.content))
 
     run_date = datetime.now().strftime("%Y-%m-%d")
 

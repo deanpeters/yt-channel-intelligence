@@ -113,12 +113,22 @@ fi
 
 # ── Python packages ──────────────────────────────────────────────────────────
 step "Installing Python packages"
-echo "     Installing openai and openai-whisper..."
-if python3 -m pip install --quiet openai openai-whisper; then
-    ok "openai and openai-whisper installed"
+echo "     Installing litellm, openai, and openai-whisper..."
+if python3 -m pip install --quiet litellm openai openai-whisper; then
+    ok "litellm, openai, and openai-whisper installed"
 else
     fail "Package install failed."
-    echo "     Try running:  pip3 install openai openai-whisper"
+    echo "     Try running:  pip3 install litellm openai openai-whisper"
+fi
+
+# Install provider-specific SDK based on LLM_MODEL
+_MODEL="${LLM_MODEL:-gpt-4o-mini}"
+if [[ "$_MODEL" == anthropic/* ]]; then
+    echo "     LLM_MODEL is Anthropic — installing anthropic SDK..."
+    python3 -m pip install --quiet anthropic && ok "anthropic installed" || warn "anthropic install failed. Run: pip3 install anthropic"
+elif [[ "$_MODEL" == gemini/* ]]; then
+    echo "     LLM_MODEL is Google — installing google-genai SDK..."
+    python3 -m pip install --quiet google-genai && ok "google-genai installed" || warn "google-genai install failed. Run: pip3 install google-genai"
 fi
 
 # ── whisper command ──────────────────────────────────────────────────────────
@@ -143,23 +153,63 @@ else
     fi
 fi
 
-# ── OPENAI_API_KEY ───────────────────────────────────────────────────────────
-step "Checking your OpenAI API key"
-if [ -n "$OPENAI_API_KEY" ]; then
-    ok "OPENAI_API_KEY is set"
+# ── API key check (provider-aware) ───────────────────────────────────────────
+step "Checking your AI provider API key"
+_MODEL="${LLM_MODEL:-gpt-4o-mini}"
+
+if [[ "$_MODEL" == anthropic/* ]]; then
+    if [ -n "$ANTHROPIC_API_KEY" ]; then
+        ok "ANTHROPIC_API_KEY is set (Anthropic provider)"
+    else
+        fail "ANTHROPIC_API_KEY is not set."
+        echo ""
+        echo "     Get an Anthropic API key at: https://console.anthropic.com/"
+        echo "     Then run:"
+        echo "     echo 'export ANTHROPIC_API_KEY=\"sk-ant-...\"' >> ~/.zshrc"
+        echo "     source ~/.zshrc"
+    fi
+elif [[ "$_MODEL" == gemini/* ]]; then
+    if [ -n "$GEMINI_API_KEY" ]; then
+        ok "GEMINI_API_KEY is set (Google provider)"
+    else
+        fail "GEMINI_API_KEY is not set."
+        echo ""
+        echo "     Get a Google API key at: https://aistudio.google.com/apikey"
+        echo "     Then run:"
+        echo "     echo 'export GEMINI_API_KEY=\"AI...\"' >> ~/.zshrc"
+        echo "     source ~/.zshrc"
+    fi
+elif [[ "$_MODEL" == ollama/* ]]; then
+    if curl -s http://localhost:11434 &>/dev/null; then
+        ok "Ollama is running locally (no API key needed)"
+    else
+        fail "Ollama does not appear to be running."
+        echo ""
+        echo "     Download Ollama at: https://ollama.com"
+        echo "     Then pull your model, for example:"
+        echo "     ollama pull llama3.2"
+        echo "     And make sure Ollama is running before generating reports."
+    fi
 else
-    fail "OPENAI_API_KEY is not set."
-    echo ""
-    echo "     You need an OpenAI API key to generate reports."
-    echo "     Get one at:  https://platform.openai.com/api-keys"
-    echo ""
-    echo "     Once you have your key, run these two commands"
-    echo "     (replace sk-... with your actual key):"
-    echo ""
-    echo "     echo 'export OPENAI_API_KEY=\"sk-...\"' >> ~/.zshrc"
-    echo "     source ~/.zshrc"
-    echo ""
-    echo "     Then re-run this script to confirm it's working."
+    if [ -n "$OPENAI_API_KEY" ]; then
+        ok "OPENAI_API_KEY is set (OpenAI provider)"
+    else
+        fail "OPENAI_API_KEY is not set."
+        echo ""
+        echo "     You need an OpenAI API key to generate reports."
+        echo "     Get one at:  https://platform.openai.com/api-keys"
+        echo ""
+        echo "     Once you have your key, run these two commands"
+        echo "     (replace sk-... with your actual key):"
+        echo ""
+        echo "     echo 'export OPENAI_API_KEY=\"sk-...\"' >> ~/.zshrc"
+        echo "     source ~/.zshrc"
+        echo ""
+        echo "     Then re-run this script to confirm it's working."
+        echo ""
+        echo "     To use a different provider instead, set LLM_MODEL before"
+        echo "     re-running. See SETUP.md for all provider options."
+    fi
 fi
 
 # ── Create reports directory ─────────────────────────────────────────────────
