@@ -71,15 +71,26 @@ channel: productside
 published: 2025-03-15
 duration: 1842
 url: https://www.youtube.com/watch?v=dQw4w9WgXcQ
+keywords:
+  - product discovery
+  - outcome-driven
+  - stakeholder alignment
+  - jobs to be done
+categories:
+  - product philosophy
+  - customer research
 ---
 
 [transcript text follows]
 ```
 
-- Whisper step writes the frontmatter using metadata already in the DB row
+- Identity fields (video_id, title, channel, published, duration, url) come from metadata already in the DB row — written immediately after transcription
+- Keywords are extracted by a lightweight Pass 0.5 LLM call on the transcript — a cheap, fast prompt that pulls the 4–8 most meaningful terms
+- Categories map to a fixed taxonomy (e.g. product philosophy, customer research, competitive signal, market framing, product launch, customer story, technical deep-dive) — the same Pass 0.5 call classifies each video into one or more categories
+- Both fields make transcripts filterable and groupable before the vector database exists, and become richer metadata for embedding once it does
 - Transcripts become importable into Obsidian, Notion, or any tool that reads markdown with frontmatter
 
-**Why it matters:** Makes transcripts trustworthy standalone artifacts — self-labeled, datestamped, and traceable to source — rather than anonymous pipeline scratch files.
+**Why it matters:** Keywords and categories turn a folder of raw transcripts into an organized, searchable library. A PM could open `.workspace/productside/transcripts/` and immediately see which videos are about competitive signals, which are customer stories, and which cover product philosophy — without reading a single transcript.
 
 ---
 
