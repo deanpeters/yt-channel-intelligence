@@ -111,6 +111,52 @@ else
     echo "     Once Homebrew is installed, run:  brew install ffmpeg"
 fi
 
+# ── Provider selection ────────────────────────────────────────────────────────
+step "Choosing your AI provider"
+if [ -n "$LLM_MODEL" ]; then
+    _MODEL="$LLM_MODEL"
+    ok "Using provider from environment: $_MODEL"
+else
+    echo ""
+    echo "  Which AI provider would you like to use to generate reports?"
+    echo "  You can change this later by editing LLM_MODEL in config.py."
+    echo ""
+    echo "    1) OpenAI gpt-4o-mini          (default, ~\$1–3 per report)"
+    echo "    2) Anthropic claude-haiku-4-5  (fast and affordable, ~\$0.50–2 per report)"
+    echo "    3) Google gemini-1.5-flash     (generous free tier, ~\$0.10–1 per report)"
+    echo "    4) Ollama (local, free)        (runs on your machine, no API key needed)"
+    echo ""
+    read -rp "  Enter 1–4 [1]: " _choice
+    _choice="${_choice:-1}"
+
+    case "$_choice" in
+        2) _MODEL="anthropic/claude-haiku-4-5" ;;
+        3) _MODEL="gemini/gemini-1.5-flash" ;;
+        4) _MODEL="ollama/llama3.2" ;;
+        *) _MODEL="gpt-4o-mini" ;;
+    esac
+
+    python3 - "$_MODEL" <<'PYEOF'
+import sys
+model = sys.argv[1]
+with open('config.py', 'r') as f:
+    lines = f.readlines()
+for i, line in enumerate(lines):
+    if 'LLM_MODEL = os.environ.get' in line:
+        lines[i] = f'LLM_MODEL = os.environ.get("LLM_MODEL", "{model}")\n'
+        break
+with open('config.py', 'w') as f:
+    f.writelines(lines)
+PYEOF
+    if [ $? -eq 0 ]; then
+        ok "Provider set to $_MODEL (saved to config.py)"
+    else
+        warn "Could not update config.py automatically."
+        echo "     Open config.py and change the LLM_MODEL default to: \"$_MODEL\""
+    fi
+    export LLM_MODEL="$_MODEL"
+fi
+
 # ── Python packages ──────────────────────────────────────────────────────────
 step "Installing Python packages"
 echo "     Installing litellm, openai, and openai-whisper..."
@@ -121,8 +167,7 @@ else
     echo "     Try running:  pip3 install litellm openai openai-whisper"
 fi
 
-# Install provider-specific SDK based on LLM_MODEL
-_MODEL="${LLM_MODEL:-gpt-4o-mini}"
+# Install provider-specific SDK based on chosen provider
 if [[ "$_MODEL" == anthropic/* ]]; then
     echo "     LLM_MODEL is Anthropic — installing anthropic SDK..."
     python3 -m pip install --quiet anthropic && ok "anthropic installed" || warn "anthropic install failed. Run: pip3 install anthropic"
@@ -155,7 +200,6 @@ fi
 
 # ── API key check (provider-aware) ───────────────────────────────────────────
 step "Checking your AI provider API key"
-_MODEL="${LLM_MODEL:-gpt-4o-mini}"
 
 if [[ "$_MODEL" == anthropic/* ]]; then
     if [ -n "$ANTHROPIC_API_KEY" ]; then
@@ -207,8 +251,8 @@ else
         echo ""
         echo "     Then re-run this script to confirm it's working."
         echo ""
-        echo "     To use a different provider instead, set LLM_MODEL before"
-        echo "     re-running. See SETUP.md for all provider options."
+        echo "     To use a different provider instead, re-run this script"
+        echo "     and choose a different option at the provider step."
     fi
 fi
 
@@ -221,6 +265,9 @@ echo "┌───────────────────────�
 if [ $ERRORS -eq 0 ]; then
     echo -e "│  ${GREEN}All set! You're ready to go.${NC}           │"
     echo "└─────────────────────────────────────────┘"
+    echo ""
+    echo "  AI provider: $_MODEL"
+    echo "  To change later: edit LLM_MODEL in config.py"
     echo ""
     echo "  To generate your first report, run:"
     echo ""

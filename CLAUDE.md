@@ -8,6 +8,17 @@ Takes a YouTube channel URL and produces a structured competitive intelligence r
 
 Product managers preparing for meetings, building competitive intelligence, or creating training material. Not engineers, not data scientists. Design everything accordingly.
 
+## Outcome focus
+
+**The end game is insights for product managers and executives. All technical decisions are in service of that outcome — not the other way around.**
+
+Before adding complexity, ask: does this make reports better, faster to get, or easier to act on? If not, it doesn't belong here.
+
+In practice:
+- Frame roadmap items and doc copy around the PM benefit first, tech second
+- Prioritize synthesis quality above pipeline efficiency — a slow report with great insights beats a fast one with shallow data
+- When design choices conflict, default to "what serves the PM in the room with a competitor"
+
 ## Design principles
 
 - `reports/` is the only directory the user ever opens

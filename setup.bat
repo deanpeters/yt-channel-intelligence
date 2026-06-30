@@ -61,7 +61,52 @@ if %errorlevel% neq 0 (
     echo   [OK] pip is available
 )
 
+:: ── Provider selection ──────────────────────────────────────────────────────
+echo.
+echo [Choosing your AI provider]
+if not "%LLM_MODEL%"=="" (
+    set _MODEL=%LLM_MODEL%
+    echo   [OK] Using provider from environment: %LLM_MODEL%
+    goto :install_yt_dlp
+)
+echo.
+echo   Which AI provider would you like to use to generate reports?
+echo   You can change this later by editing LLM_MODEL in config.py.
+echo.
+echo     1) OpenAI gpt-4o-mini          (default, ~$1-3 per report)
+echo     2) Anthropic claude-haiku-4-5  (fast and affordable, ~$0.50-2 per report)
+echo     3) Google gemini-1.5-flash     (generous free tier, ~$0.10-1 per report)
+echo     4) Ollama (local, free)        (runs on your machine, no API key needed)
+echo.
+choice /C 1234 /N /M "  Enter 1-4 [press 1 for default]: "
+if %errorlevel% equ 2 set _MODEL=anthropic/claude-haiku-4-5
+if %errorlevel% equ 3 set _MODEL=gemini/gemini-1.5-flash
+if %errorlevel% equ 4 set _MODEL=ollama/llama3.2
+if %errorlevel% equ 1 set _MODEL=gpt-4o-mini
+if "%_MODEL%"=="" set _MODEL=gpt-4o-mini
+
+:: Save to config.py using Python (avoids batch quoting nightmares)
+echo model = '%_MODEL%'                                        > "%TEMP%\ucfg.py"
+echo lines = open('config.py').readlines()                   >> "%TEMP%\ucfg.py"
+echo out = []                                                >> "%TEMP%\ucfg.py"
+echo for line in lines:                                      >> "%TEMP%\ucfg.py"
+echo     if 'LLM_MODEL = os.environ.get' in line:           >> "%TEMP%\ucfg.py"
+echo         q = chr(34)                                     >> "%TEMP%\ucfg.py"
+echo         out.append(f'LLM_MODEL = os.environ.get({q}LLM_MODEL{q}, {q}{model}{q})\n') >> "%TEMP%\ucfg.py"
+echo     else:                                               >> "%TEMP%\ucfg.py"
+echo         out.append(line)                                >> "%TEMP%\ucfg.py"
+echo open('config.py', 'w').writelines(out)                 >> "%TEMP%\ucfg.py"
+%PYTHON% "%TEMP%\ucfg.py" >nul 2>&1
+if %errorlevel% equ 0 (
+    echo   [OK] Provider set to %_MODEL% (saved to config.py^)
+) else (
+    echo   [!]  Could not update config.py automatically.
+    echo        Open config.py and set LLM_MODEL default to: %_MODEL%
+)
+del "%TEMP%\ucfg.py" >nul 2>&1
+
 :: ── yt-dlp ────────────────────────────────────────────────────────────────
+:install_yt_dlp
 echo.
 echo [Installing yt-dlp - YouTube downloader]
 yt-dlp --version >nul 2>&1
@@ -90,20 +135,18 @@ if %errorlevel% neq 0 (
     echo   [OK] litellm, openai, and openai-whisper installed
 )
 
-:: Install provider SDK if LLM_MODEL is set to a non-OpenAI provider
-if not "%LLM_MODEL%"=="" (
-    echo %LLM_MODEL% | findstr /b "anthropic/" >nul 2>&1
-    if %errorlevel% equ 0 (
-        echo        LLM_MODEL is Anthropic -- installing anthropic SDK...
-        %PYTHON% -m pip install --quiet anthropic
-        if %errorlevel% equ 0 (echo   [OK] anthropic installed) else (echo   [!]  anthropic install failed. Run: pip install anthropic)
-    )
-    echo %LLM_MODEL% | findstr /b "gemini/" >nul 2>&1
-    if %errorlevel% equ 0 (
-        echo        LLM_MODEL is Google -- installing google-genai SDK...
-        %PYTHON% -m pip install --quiet google-genai
-        if %errorlevel% equ 0 (echo   [OK] google-genai installed) else (echo   [!]  google-genai install failed. Run: pip install google-genai)
-    )
+:: Install provider SDK based on chosen provider
+echo %_MODEL% | findstr /b "anthropic/" >nul 2>&1
+if %errorlevel% equ 0 (
+    echo        Installing Anthropic SDK...
+    %PYTHON% -m pip install --quiet anthropic
+    if %errorlevel% equ 0 (echo   [OK] anthropic installed) else (echo   [!]  anthropic install failed. Run: pip install anthropic)
+)
+echo %_MODEL% | findstr /b "gemini/" >nul 2>&1
+if %errorlevel% equ 0 (
+    echo        Installing Google SDK...
+    %PYTHON% -m pip install --quiet google-genai
+    if %errorlevel% equ 0 (echo   [OK] google-genai installed) else (echo   [!]  google-genai install failed. Run: pip install google-genai)
 )
 
 :: ── ffmpeg ─────────────────────────────────────────────────────────────────
@@ -138,7 +181,6 @@ if %errorlevel% equ 0 (
 echo.
 echo [Checking your AI provider API key]
 
-set _MODEL=%LLM_MODEL%
 if "%_MODEL%"=="" set _MODEL=gpt-4o-mini
 
 echo %_MODEL% | findstr /b "anthropic/" >nul 2>&1
@@ -216,6 +258,9 @@ echo +------------------------------------------+
 if !ERRORS! equ 0 (
     echo ^|  All set! You are ready to go.          ^|
     echo +------------------------------------------+
+    echo.
+    echo   AI provider: %_MODEL%
+    echo   To change later: edit LLM_MODEL in config.py
     echo.
     echo   To generate your first report, run:
     echo.
