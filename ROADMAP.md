@@ -111,17 +111,30 @@ categories:
 
 ---
 
-### Podcast and RSS ingestion
+### Podcast and alternative source ingestion
 
-**What:** Extend the pipeline beyond YouTube to include podcast feeds and other public audio sources. Many companies publish the same content — or exclusive content — as podcasts.
+**What:** Extend the pipeline beyond YouTube channel URLs to support podcasts, specific playlists used as recurring series, and any audio source a company publishes regularly.
 
-**How it would work:**
-- New phase: `phases/ingest_rss.py` — parses a podcast RSS feed, extracts episode metadata and audio URLs, downloads audio directly
+**Sources to support:**
+
+| Source | Example | How |
+|---|---|---|
+| YouTube podcast tab | `https://www.youtube.com/@LennysPodcast/podcasts` | Already works via yt-dlp — same as `/videos` |
+| YouTube playlist as series | `https://www.youtube.com/playlist?list=PLxxx` | Already works — slug derived from `list=` param |
+| Podcast RSS feed | `https://feeds.transistor.fm/lenny-s-podcast` | New `phases/ingest_rss.py` — parse feed, download audio directly |
+| Podcast site audio | Direct `.mp3` / `.m4a` URL | yt-dlp handles most cases; fallback to direct HTTP download |
+
+**What's already working today:** YouTube channel tabs (including `/podcasts`) and playlist URLs work without any changes — yt-dlp handles them. Small playlists (even 20 videos over 3 years) are fully captured since `MAX_VIDEOS=50` and the 30-month window are both generous enough not to cut anything off.
+
+**What needs building:** RSS feed ingestion for sources that live outside YouTube. A podcast published on Spotify, Apple Podcasts, or a company's own site won't have a YouTube URL — the RSS feed is the only reliable way to reach it.
+
+**How RSS ingestion would work:**
+- New phase: `phases/ingest_rss.py` — parses an RSS feed, extracts episode metadata and enclosure audio URLs, downloads directly
 - Same whisper → Pass 1 → Pass 2 pipeline applies unchanged
 - `agent.py` accepts either a YouTube URL or an RSS feed URL and routes accordingly
 - Episode title and publish date come from RSS `<item>` metadata
 
-**Why it matters:** Some of the most candid company content lives in podcast form — founder interviews, customer stories, earnings call recaps. This doubles the signal surface without changing the output format.
+**Why it matters:** Some of the most candid company content lives outside YouTube — founder interviews, earnings call recaps, customer stories. Supporting RSS means one command can ingest a company's entire public audio footprint, not just what they've posted on YouTube.
 
 ---
 
