@@ -188,21 +188,31 @@ python3 agent.py https://www.youtube.com/playlist?list=PLxxxxxxxxxxxxxxx
 
 Topical mode captures source material for a knowledge base without applying the company-intelligence report questions to it.
 
-The easiest way to capture (or resume) a batch is the standalone capture
-scripts, which you can run outside any agent session — for example overnight or
-whenever you want the next batch:
+### Adding a batch of videos — two steps
+
+To grow the corpus you run two scripts with one manual review in between. They
+handle the environments for you.
 
 ```bash
-bash setup-capture.sh                     # one-time: build the capture venv
-bash capture-topic.sh "https://www.youtube.com/playlist?list=PLZ6vahBdAJ3iArMOb5Mrpav98SjW9dsaz" 35
+# STEP 1 — capture the videos and draft their case configs.
+# The last number is the playlist position to capture up to.
+bash batch-1-capture.sh "https://www.youtube.com/playlist?list=PLZ6vahBdAJ3iArMOb5Mrpav98SjW9dsaz" 50
 ```
 
-The second argument is the playlist position to capture up to (`35` captures
-through video 35, skipping anything already done). It downloads, transcribes,
-and does one automatic mop-up pass to recover transient download failures. Safe
-to re-run: completed videos are skipped and the queue resumes where it left off.
+Step 1 prints the one file to review. Open it, check the case roles and sponsor
+timestamps, and paste its entries into the `cases:` block of
+`topics/business-failures.yaml`. Then:
 
-Under the hood this runs the same capture pipeline directly:
+```bash
+# STEP 2 — label, index, rebuild the learning layer, and confirm nothing broke.
+bash batch-2-build.sh
+```
+
+That is the whole loop: **capture → review one file → build.** Step 1 is safe to
+re-run and resumes where it left off. Everything else in this section is the
+lower-level detail behind those two scripts.
+
+Under the hood the capture step runs the same pipeline directly:
 
 ```bash
 python3 agent.py \
