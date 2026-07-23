@@ -264,6 +264,34 @@ Run the twenty-video calibration check:
   --output reports/topics/business-failures-calibration-evaluation.md
 ```
 
+Build the deterministic learning layer — source-linked case cards, causal
+chains, and a cross-case pattern matrix aggregated from the reviewed labels
+(no LLM calls):
+
+```bash
+.venv-topic/bin/python topic_corpus.py learn
+```
+
+This writes per-case Markdown cards, `case-cards.json`, and
+`pattern-matrix.csv` under `.workspace/topics/business-failures/learning/`.
+Each card links every mechanism and causal-chain node to its source passage
+and timestamp, and flags evidence gaps (mechanisms asserted for a case but
+never backed by a direct source claim).
+
+Add the LLM prose layer — teaching notes written on top of the case cards.
+Every lesson cites a timestamp that exists in the card, is tagged
+source-supported or analyst-inference, and each case's evidence gaps become an
+explicit "cannot yet claim" section. Citations are validated against the card,
+so a hallucinated timestamp is flagged rather than trusted:
+
+```bash
+.venv-topic/bin/python topic_corpus.py teach
+```
+
+This writes per-case teaching notes (Markdown + JSON) under
+`.workspace/topics/business-failures/learning/teaching-notes/` and reports how
+many lessons, if any, failed citation validation.
+
 The export command creates CSV, JSONL, and Parquet study files. Open
 [`notebooks/business-failures-exploration.ipynb`](notebooks/business-failures-exploration.ipynb)
 locally, in Google Colab, or in Google Antigravity to inspect cases, labels,

@@ -18,6 +18,8 @@ from phases.topic_review import (
     apply_review_worksheet,
     build_review_worksheet,
 )
+from phases.topic_learning import build_learning_layer
+from phases.topic_teaching import build_teaching_layer
 
 
 def _print_hits(hits: list[dict]) -> None:
@@ -136,6 +138,9 @@ def main():
 
     subparsers.add_parser("index")
     subparsers.add_parser("export")
+    subparsers.add_parser("learn")
+    teach = subparsers.add_parser("teach")
+    teach.add_argument("--model", default=LLM_MODEL)
 
     query = subparsers.add_parser("query")
     query.add_argument("question")
@@ -239,6 +244,14 @@ def main():
         if not hits:
             print("No passages matched the question within the requested scope.")
         _print_hits(hits)
+    elif args.command == "learn":
+        path, stats = build_learning_layer(args.config)
+        print(f"Learning layer ready: {path}")
+        print(json.dumps(stats, indent=2))
+    elif args.command == "teach":
+        path, stats = build_teaching_layer(args.config, model=args.model)
+        print(f"Teaching notes ready: {path}")
+        print(json.dumps(stats, indent=2))
     elif args.command == "review-sample":
         path, count = build_review_worksheet(
             args.config,

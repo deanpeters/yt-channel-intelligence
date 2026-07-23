@@ -1,8 +1,11 @@
 # Current State and Restart Guide
 
-**Checkpoint:** Phase 0 complete. Phase 2 tooling in progress: retrieval
-scoping and the stratified label-review harness are implemented; the human
-label audit and taxonomy-bump decision are still pending.
+**Checkpoint:** Phase 0 complete. Phase 2 tooling committed: retrieval
+scoping and the stratified label-review harness are implemented (the human
+label audit and taxonomy-bump decision are still pending). Phase 3 in
+progress: the deterministic learning layer (case cards, causal chains,
+pattern matrix) and the LLM teaching-notes prose layer (citation-validated
+against the cards) are implemented; pedagogic evaluations are still pending.
 
 **Updated:** 2026-07-23
 
