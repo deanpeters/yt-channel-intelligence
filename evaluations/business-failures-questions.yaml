@@ -1,0 +1,40 @@
+questions:
+  - question: How did early structural choices make later adaptation difficult?
+    expected_cases: [CU3xYnICJ0s]
+    expected_mechanisms: [path_dependence]
+
+  - question: How can debt create a self-reinforcing decline in customer experience?
+    expected_cases: [KhoAf9K9JC8]
+    expected_mechanisms: [financial_leverage]
+
+  - question: Where were warnings ignored or inconvenient feedback suppressed?
+    expected_cases: [eX9ZC5k7XdI]
+    expected_mechanisms: [feedback_suppression, normalization_of_deviance]
+
+  - question: How did short-term incentives undermine long-term health?
+    expected_cases: [CU3xYnICJ0s, KhoAf9K9JC8, eX9ZC5k7XdI]
+    expected_mechanisms: [short_term_optimization, incentive_misalignment]
+
+  - question: Which organizations became stuck between incompatible strategic positions?
+    expected_cases: [CU3xYnICJ0s, KhoAf9K9JC8]
+    expected_mechanisms: [unclear_positioning]
+
+  - question: What happens when an organization accomplishes its original mission but fails to define another?
+    expected_cases: [eX9ZC5k7XdI]
+    expected_mechanisms: [mission_loss]
+
+  - question: How did more focused competitors exploit an incumbent's weakness?
+    expected_cases: [CU3xYnICJ0s, KhoAf9K9JC8, eX9ZC5k7XdI]
+    expected_mechanisms: [capability_erosion]
+
+  - question: What warning signs appeared before the visible failure outcomes?
+    expected_cases: [CU3xYnICJ0s, KhoAf9K9JC8, eX9ZC5k7XdI]
+    expected_mechanisms: []
+
+  - question: What turnaround or replacement strategies were attempted, and why did they work or fail?
+    expected_cases: [CU3xYnICJ0s, KhoAf9K9JC8, eX9ZC5k7XdI]
+    expected_mechanisms: [failed_transformation]
+
+  - question: How does institutional mission failure differ from corporate decline in these cases?
+    expected_cases: [CU3xYnICJ0s, KhoAf9K9JC8, eX9ZC5k7XdI]
+    expected_mechanisms: [mission_loss, market_or_demographic_shift]

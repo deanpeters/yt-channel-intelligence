@@ -1,5 +1,88 @@
 # Roadmap
 
+## Approved execution phases
+
+This sequence is the active delivery plan. The older Now / Next / Later
+horizons below remain useful as a feature backlog, but phase gates determine
+what happens next.
+
+### Phase 0 — Document and checkpoint the implemented system
+
+**Goal:** Make the current work reproducible and restartable before adding
+another feature.
+
+- [x] Update the user-facing `README.md`.
+- [x] Add repository-level `AGENTS.md`.
+- [x] Refresh `CLAUDE.md` for company and topical modes.
+- [x] Add `docs/current-state.md` as the evidence-backed restart guide.
+- [x] Reconcile the roadmap with the agreed phase sequence.
+- [x] Document the queue, taxonomy, retrieval, exports, notebook, results,
+  limitations, and next gates.
+- [x] Verify the implementation and notebook.
+- [x] Confirm the GitHub repository is public.
+- [x] Commit the complete checkpoint and push it to `main`.
+
+**Exit gate:** Documentation matches the live implementation, checks pass, the
+remote repository is public, and `origin/main` contains the Phase 0 commit.
+
+### Phase 1 — Repair company-intelligence report quality
+
+1. Regenerate the included sample report from a validated canvas.
+2. Require usable quote, video, and date attribution in evidence-bearing
+   sections.
+3. Preserve `not_saying` as the explicitly labeled inference exception.
+4. Add a release check for the report evidence contract.
+
+### Phase 2 — Review and scope the topical foundation
+
+1. Review a stratified sample of the twenty-case v0.3 labels in the notebook.
+2. Record corrections and decide whether the taxonomy needs a version bump.
+3. Add retrieval scope by case set, industry, case role, and playlist range.
+4. Keep the original regression suite unchanged and separate from expansion
+   suites.
+
+### Phase 3 — Build the pedagogic learning layer
+
+1. Generate source-linked case cards for all twenty cases.
+2. Generate causal chains that distinguish source claims from inference.
+3. Create a cross-case pattern matrix.
+4. Create teaching notes with lessons, counterexamples, boundary conditions,
+   discussion questions, and evidence gaps.
+5. Add pedagogic evaluations for patterns, counterexamples, and boundaries.
+
+### Phase 4 — Add trustworthy synthesis and corroboration
+
+1. Add source-backed answer synthesis after scoped retrieval passes review.
+2. Label unsupported generalization and analyst inference.
+3. Run a small corroboration pilot using a second source.
+4. Do not call the corpus domain intelligence until corroboration is present.
+
+### Phase 5 — Expand through reviewed batches
+
+1. Capture playlist positions 21–35.
+2. Review sponsor boundaries, transcript quality, taxonomy drift, retrieval
+   coverage, and new patterns.
+3. Relabel affected passages and build a new disposable collection when needed.
+4. Continue through the playlist in gated batches of 15–20 videos.
+
+### Phase 6 — Improve portable study surfaces
+
+1. Package data-only archives containing manifests, canonical transcripts,
+   taxonomy, evaluations, exports, and the notebook.
+2. Support Jupyter, Google Colab, Google Antigravity, pandas, Polars, and
+   DuckDB without requiring private API keys for exploration.
+3. Exclude audio and generated Chroma indexes from portable archives.
+
+### Phase 7 — Extend into domain intelligence
+
+1. Apply the topical architecture across multiple channels, companies, and
+   source types.
+2. Add source comparison, contradiction tracking, and corroboration.
+3. Build domain-level patterns only after the topical review workflow is
+   trustworthy.
+
+---
+
 Three time horizons. Each builds on the one before it.
 
 | Horizon | Theme | Focus |
@@ -99,6 +182,7 @@ categories:
 **What:** The synthesis prompts and canvas schema will continue to evolve as we learn what product managers actually need.
 
 **Known gaps to address:**
+- The included sample report does not display the verbatim evidence quotes promised by the report contract. Regenerate it from a validated canvas and add a release check that fails when evidence-bearing sections contain claims without usable quote, video, and date attribution. `not_saying` remains the explicitly labeled inference exception.
 - `not_saying` section tends to surface only one gap; should enumerate three to five
 - `building_for` sometimes drifts toward demographics instead of mindset and JTBD
 - `placing_bets` rarely surfaces the "what breaks if the assumption is wrong" angle
@@ -108,6 +192,97 @@ categories:
 - Upgrade synthesis model from `gpt-4o-mini` to `gpt-4o` for Pass 2 only (better reasoning, modest cost increase)
 - Add a Pass 1.5 aggregation step that clusters and de-duplicates signals across all videos before Pass 2
 - Add confidence scoring to canvas claims so the report can distinguish high-signal patterns from thin evidence
+
+---
+
+### Topical intelligence — twenty-video calibration corpus
+
+**What:** Add a topical corpus mode alongside company intelligence. Instead of asking, "What is this company trying to do?", topical mode asks, "What can we learn across a body of material about this subject, and where did each finding come from?"
+
+**Calibration status (2026-07-23):** Twenty videos are captured and transcribed; all 121 playlist entries are materialized in the durable SQLite queue. Taxonomy v0.3 distinguishes failure and decline from turnaround, resilience, partial recovery, and values-tradeoff cases. The local index contains 334 content passages and excludes 54 reviewed sponsor passages. Hybrid retrieval scores 5/10 strict and 5/10 complete case coverage on the unchanged three-case regression, and 8/10 strict plus 8/10 complete case coverage on the new twenty-video calibration suite. Portable CSV, JSONL, and Parquet exports plus a Colab-ready notebook are complete. Details are in [`docs/topical-intelligence/business-failures-spike.md`](docs/topical-intelligence/business-failures-spike.md) and [`docs/topical-intelligence/scale-and-learning-plan.md`](docs/topical-intelligence/scale-and-learning-plan.md).
+
+**Next gate:** Do not start another capture batch yet. Add explicit query scope or conversational case context, review a stratified sample of v0.3 labels in the notebook, and generate case cards plus causal chains for the twenty cases. Keep the original regression unchanged and report it separately from expansion suites.
+
+The calibration corpus uses the first twenty videos from this business-failures playlist:
+
+`https://www.youtube.com/playlist?list=PLZ6vahBdAJ3iArMOb5Mrpav98SjW9dsaz`
+
+The playlist URL already works with the current YouTube discovery and download path. The new work is the transcript format, topic-aware enrichment, retrieval index, and query experience.
+
+**Why grow from ten to twenty:** The second batch tested the durable queue,
+portable analysis path, and whether the taxonomy could represent counterexamples.
+It exposed a necessary `case_role` dimension: Crocs is a turnaround and Panda
+Express is a resilience case, not a failure that should be forced into negative
+labels.
+
+**Architecture boundary:**
+- Keep company intelligence as an intact report mode; do not replace its two-pass canvas.
+- Share discovery, download, transcription, SQLite resume state, and source metadata across modes.
+- Give topical mode its own enrichment and retrieval stages.
+- Make topical captures relevance-bounded by playlist or explicit selection, not automatically limited by the company-oriented 30-month lookback.
+- Treat domain intelligence across multiple companies and sources as a later mode built on the topical foundation.
+
+**Proof-of-learning sequence:**
+
+1. **Capture twenty source videos**
+   - Use an explicit `--limit 20` capture boundary while materializing the full playlist queue.
+   - Preserve the original audio, raw transcript, timestamped subtitle output, title, publication date, duration, video ID, playlist ID, channel, and YouTube URL.
+   - Do not generate the existing company-intelligence report for this run.
+
+2. **Inspect before categorizing**
+   - Read the transcripts as a set and identify recurring ways business failure is described.
+   - Begin with candidate labels such as company or subject, industry, failure stage, precipitating event, contributing factors, decisions, outcomes, warning signals, and evidence type.
+   - Record unclear or overlapping labels instead of forcing every passage into a category.
+   - Human-review the proposed taxonomy before applying it to more videos.
+
+3. **Write canonical transcript records**
+   - Store each transcript as Markdown with YAML frontmatter, following the proven metadata-preservation pattern in `lennysan-rag-o-matic`.
+   - Include stable source fields plus `corpus_type`, `corpus_slug`, `topic`, `keywords`, `taxonomy_version`, and the reviewed topic labels.
+   - Keep raw transcript text separate from generated labels so the source can be reprocessed when the taxonomy changes.
+
+4. **Build a local retrieval index**
+   - Chunk transcripts with overlap and copy the full source metadata onto every chunk.
+   - Preserve each chunk's start and end timestamps so citations can deep-link to the relevant moment in the video.
+   - Use local `sentence-transformers/all-MiniLM-L6-v2` embeddings and a separate Chroma collection per corpus.
+   - Use MMR-style retrieval to reduce near-duplicate results.
+   - Keep the generated vector index disposable and rebuildable from the canonical Markdown transcripts.
+
+5. **Add a cited query path**
+   - Support questions such as, "What warning signs appeared before these businesses failed?" or "Which failures involved premature expansion?"
+   - Return a direct synthesis, distinguish source-backed findings from inference, and show the video title, date, URL, and relevant excerpt for every answer.
+   - Refuse to generalize beyond the captured evidence without labeling the limitation.
+
+6. **Decide whether to scale**
+   - Review retrieval quality, label usefulness, attribution, and unanswered questions.
+   - Revise and version the taxonomy.
+   - Only then ingest the rest of the playlist and add incremental indexing.
+
+**Suggested workspace shape:**
+
+```text
+.workspace/
+  topics/
+    business-failures/
+      corpus.json
+      channel.db
+      audio/
+      transcripts/
+        <video-id>/
+          raw.txt
+          transcript.md
+      index/
+        chroma_db/
+```
+
+**Proof-of-learning success criteria:**
+   - Twenty videos can be captured and resumed without disturbing existing company workspaces.
+- Every transcript has complete, human-readable source metadata.
+- The initial taxonomy is documented as versioned workup, not permanent truth.
+- A query retrieves relevant passages from more than one video when appropriate.
+- Every synthesized answer links back to the exact source videos, timestamps, and excerpts.
+- Rebuilding the vector index does not require downloading or transcribing again.
+
+**Not in the first slice:** full-playlist ingestion, automated taxonomy finalization, domain-level company comparison, a Streamlit interface, or a polished topical report. The first outcome is a trustworthy mini knowledge base we can learn from.
 
 ---
 

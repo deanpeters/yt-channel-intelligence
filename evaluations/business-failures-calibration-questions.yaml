@@ -1,0 +1,40 @@
+questions:
+  - question: How did platform or channel dependence make established media businesses vulnerable when distribution changed?
+    expected_cases: [hKZM21muITg, MPtnA6-LDzw, NfkzzB_EG5c]
+    expected_mechanisms: [channel_or_platform_dependency]
+
+  - question: Where did adverse selection cause the best participants to stop needing the platform?
+    expected_cases: [3cQ20dNnmDA]
+    expected_mechanisms: [adverse_selection]
+
+  - question: Which cases show success-induced obsolescence, where the original success made the product or gatekeeper less necessary?
+    expected_cases: [3cQ20dNnmDA, NfkzzB_EG5c]
+    expected_mechanisms: [success_induced_obsolescence]
+
+  - question: What bad acquisition or integration decisions destroyed value?
+    expected_cases: [e31CEPxSJaU, guxBwYjQ_GI]
+    expected_mechanisms: [acquisition_or_integration_failure]
+
+  - question: Which case is a successful turnaround counterexample, and what changed?
+    expected_cases: [e31CEPxSJaU]
+    expected_mechanisms: []
+
+  - question: Which case is a resilience counterexample that successfully adapted before its old channel declined?
+    expected_cases: [dAp7D2ZX8Ik]
+    expected_mechanisms: []
+
+  - question: How did cost structure and strategic positioning combine to hurt restaurant chains?
+    expected_cases: [4-8_etpRj1Y, hwFIjOsWoCs]
+    expected_mechanisms: [cost_structure_mismatch, unclear_positioning]
+
+  - question: How did debt and ownership incentives constrain Outback and QVC or HSN?
+    expected_cases: [HEdhdnbp9lo, hKZM21muITg]
+    expected_mechanisms: [financial_leverage, ownership_or_portfolio_neglect]
+
+  - question: How did short-term incentives erode Cartoon Network's relationship with viewers and creators?
+    expected_cases: [MPtnA6-LDzw]
+    expected_mechanisms: [short_term_optimization, incentive_misalignment]
+
+  - question: Which cases found a smaller or more focused path after visible decline?
+    expected_cases: [e31CEPxSJaU, NfkzzB_EG5c]
+    expected_mechanisms: []

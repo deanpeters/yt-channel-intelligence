@@ -6,6 +6,10 @@
 pip install litellm openai openai-whisper
 ```
 
+The experimental topical retrieval workflow has its own isolated dependencies
+in `requirements-topic.txt`. Install them with `bash setup-topic.sh` so Chroma
+and the embedding stack do not disturb unrelated Python tools.
+
 Add the SDK for your chosen provider if not using OpenAI:
 
 ```bash

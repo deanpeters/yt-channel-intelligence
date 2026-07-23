@@ -1,0 +1,588 @@
+corpus_slug: business-failures
+topic: Business failures
+taxonomy_version: "0.3-workup"
+workspace: .workspace/topics/business-failures
+embedding_model: sentence-transformers/all-MiniLM-L6-v2
+collection_name: business-failures-v0-3
+
+taxonomy:
+  causal_roles:
+    - initial_advantage
+    - structural_constraint
+    - decision
+    - mechanism
+    - amplifier
+    - trigger
+    - warning_signal
+    - consequence
+    - response
+    - counterexample
+  failure_mechanisms:
+    - strategic_drift
+    - unclear_positioning
+    - path_dependence
+    - cost_structure_mismatch
+    - ownership_or_portfolio_neglect
+    - incentive_misalignment
+    - governance_failure
+    - capability_erosion
+    - stakeholder_betrayal
+    - feedback_suppression
+    - financial_leverage
+    - short_term_optimization
+    - market_or_demographic_shift
+    - mission_loss
+    - normalization_of_deviance
+    - failed_transformation
+    - fraud_or_asset_misappropriation
+    - identity_or_reputation_coupling
+    - network_effect_reversal
+    - quality_or_value_erosion
+    - overexpansion_or_overcapacity
+    - commoditization
+    - mission_or_values_lock_in
+    - channel_or_platform_dependency
+    - adverse_selection
+    - success_induced_obsolescence
+    - acquisition_or_integration_failure
+  actors:
+    - leadership
+    - owner_or_investor
+    - workforce
+    - customer
+    - franchisee_or_partner
+    - contractor_or_supplier
+    - regulator_or_politician
+    - competitor
+  evidence_types:
+    - historical_event
+    - quantitative_metric
+    - named_source_or_quote
+    - narrator_analysis
+    - comparison
+    - personal_anecdote
+    - sponsor_segment
+  epistemic_statuses:
+    - direct_source_claim
+    - derived_inference
+    - contested_or_unverified
+    - missing_evidence
+
+cases:
+  CU3xYnICJ0s:
+    subject: Pizza Hut
+    case_role: failure
+    subject_type: company
+    industry: restaurants
+    geography: United States
+    time_period: 1958-2026
+    failure_states:
+      - sustained_decline
+      - franchisee_bankruptcy
+      - distressed_sale
+    failure_mechanisms:
+      - path_dependence
+      - cost_structure_mismatch
+      - ownership_or_portfolio_neglect
+      - unclear_positioning
+      - market_or_demographic_shift
+      - failed_transformation
+    sponsor_intervals:
+      - {start: 27, end: 35, sponsor: Outskill mention}
+      - {start: 249, end: 320, sponsor: Outskill}
+      - {start: 858, end: 881, sponsor: Compound Conference}
+
+  KhoAf9K9JC8:
+    subject: American Airlines
+    case_role: failure
+    subject_type: company
+    industry: airlines
+    geography: United States
+    time_period: 1930-2026
+    failure_states:
+      - bankruptcy
+      - market_share_loss
+      - customer_experience_decline
+      - debt_constrained_reinvestment
+    failure_mechanisms:
+      - capability_erosion
+      - stakeholder_betrayal
+      - financial_leverage
+      - short_term_optimization
+      - unclear_positioning
+      - failed_transformation
+    sponsor_intervals:
+      - {start: 33, end: 40, sponsor: Relay mention}
+      - {start: 289, end: 351, sponsor: Relay}
+      - {start: 373, end: 391, sponsor: Bedrock}
+
+  eX9ZC5k7XdI:
+    subject: NASA
+    case_role: institutional_failure
+    subject_type: government_agency
+    industry: space
+    geography: United States
+    time_period: 1958-2026
+    failure_states:
+      - safety_catastrophe
+      - cost_escalation
+      - launch_capability_loss
+      - commercial_displacement
+    failure_mechanisms:
+      - mission_loss
+      - incentive_misalignment
+      - governance_failure
+      - feedback_suppression
+      - normalization_of_deviance
+      - capability_erosion
+    sponsor_intervals:
+      - {start: 27, end: 35, sponsor: Homebase mention}
+      - {start: 300, end: 360, sponsor: Homebase}
+      - {start: 527, end: 545, sponsor: Compound Conference}
+
+  JwqbWp3738o:
+    subject: Tesla
+    case_role: decline
+    subject_type: company
+    industry: automotive
+    geography: United States
+    time_period: 2010-2026
+    failure_states:
+      - sales_decline
+      - market_share_loss
+      - brand_reputation_damage
+    failure_mechanisms:
+      - identity_or_reputation_coupling
+      - stakeholder_betrayal
+      - unclear_positioning
+      - strategic_drift
+      - market_or_demographic_shift
+    sponsor_intervals:
+      - {start: 42, end: 46, sponsor: Zapier mention}
+      - {start: 358, end: 422, sponsor: Zapier}
+      - {start: 828, end: 844, sponsor: Compound Conference}
+
+  3470164O6p8:
+    subject: FTX
+    case_role: failure
+    subject_type: company
+    industry: cryptocurrency
+    geography: Global
+    time_period: 2017-2024
+    failure_states:
+      - fraud_conviction
+      - bankruptcy
+      - customer_asset_loss
+      - confidence_collapse
+    failure_mechanisms:
+      - fraud_or_asset_misappropriation
+      - governance_failure
+      - incentive_misalignment
+      - feedback_suppression
+      - stakeholder_betrayal
+    sponsor_intervals:
+      - {start: 31, end: 36, sponsor: Monarch mention}
+      - {start: 466, end: 520, sponsor: Monarch}
+
+  v8w6djdUt1U:
+    subject: McDonald's
+    case_role: decline
+    subject_type: company
+    industry: restaurants
+    geography: United States
+    time_period: 1940-2026
+    failure_states:
+      - same_store_sales_decline
+      - value_perception_decline
+      - customer_frequency_decline
+    failure_mechanisms:
+      - short_term_optimization
+      - unclear_positioning
+      - strategic_drift
+      - cost_structure_mismatch
+      - stakeholder_betrayal
+      - market_or_demographic_shift
+      - quality_or_value_erosion
+    sponsor_intervals:
+      - {start: 303, end: 367, sponsor: Near}
+      - {start: 958, end: 973, sponsor: Bedrock}
+
+  zmp7kFYYL6U:
+    subject: Snapchat
+    case_role: underperformance
+    subject_type: company
+    industry: social_media
+    geography: Global
+    time_period: 2011-2026
+    failure_states:
+      - user_growth_stagnation
+      - creator_abandonment
+      - market_share_loss
+      - repeated_product_misfires
+    failure_mechanisms:
+      - governance_failure
+      - feedback_suppression
+      - failed_transformation
+      - network_effect_reversal
+      - capability_erosion
+      - incentive_misalignment
+    sponsor_intervals:
+      - {start: 29, end: 36, sponsor: David mention}
+      - {start: 455, end: 536, sponsor: David}
+      - {start: 723, end: 734, sponsor: Compound Conference}
+
+  WhVSww5fzBA:
+    subject: Doritos
+    case_role: decline
+    subject_type: product_brand
+    industry: packaged_food
+    geography: United States
+    time_period: 1964-2026
+    failure_states:
+      - volume_decline
+      - customer_trust_decline
+      - parent_company_growth_stagnation
+    failure_mechanisms:
+      - short_term_optimization
+      - quality_or_value_erosion
+      - stakeholder_betrayal
+      - strategic_drift
+      - market_or_demographic_shift
+    sponsor_intervals:
+      - {start: 60, end: 69, sponsor: Compound Conference}
+      - {start: 400, end: 475, sponsor: Bedrock}
+
+  31oqfd8myBI:
+    subject: Craigslist
+    case_role: values_tradeoff
+    subject_type: company
+    industry: online_classifieds
+    geography: United States
+    time_period: 1995-2026
+    failure_states:
+      - traffic_decline
+      - category_fragmentation
+      - relevance_decline
+    failure_mechanisms:
+      - path_dependence
+      - mission_or_values_lock_in
+      - capability_erosion
+      - failed_transformation
+      - market_or_demographic_shift
+      - network_effect_reversal
+    sponsor_intervals:
+      - {start: 290, end: 349, sponsor: Near}
+      - {start: 1226, end: 1237, sponsor: Compound Conference}
+
+  mNiOhjB7hNI:
+    subject: Pickleball business ecosystem
+    case_role: boom_bust_risk
+    subject_type: market_ecosystem
+    industry: sports_and_recreation
+    geography: United States
+    time_period: 1965-2026
+    failure_states:
+      - growth_slowdown
+      - franchisee_losses
+      - equipment_company_bankruptcies
+      - capacity_overhang
+    failure_mechanisms:
+      - market_or_demographic_shift
+      - cost_structure_mismatch
+      - overexpansion_or_overcapacity
+      - commoditization
+      - incentive_misalignment
+    sponsor_intervals:
+      - {start: 33, end: 38, sponsor: Relay mention}
+      - {start: 322, end: 372, sponsor: Relay}
+
+  HEdhdnbp9lo:
+    subject: Outback Steakhouse
+    case_role: failure
+    subject_type: company
+    industry: restaurants
+    geography: United States
+    time_period: 1988-2026
+    failure_states:
+      - sustained_store_closures
+      - debt_constrained_restructuring
+      - same_store_sales_decline
+      - repeated_leadership_turnover
+    failure_mechanisms:
+      - incentive_misalignment
+      - financial_leverage
+      - ownership_or_portfolio_neglect
+      - cost_structure_mismatch
+      - market_or_demographic_shift
+      - capability_erosion
+      - overexpansion_or_overcapacity
+    sponsor_intervals:
+      - {start: 25, end: 30, sponsor: Merlin mention}
+      - {start: 274, end: 336, sponsor: Merlin}
+
+  hKZM21muITg:
+    subject: QVC and HSN
+    case_role: failure
+    subject_type: company_pair
+    industry: television_retail
+    geography: United States
+    time_period: 1977-2026
+    failure_states:
+      - bankruptcy
+      - revenue_decline
+      - supplier_pullback
+      - workforce_reduction
+    failure_mechanisms:
+      - channel_or_platform_dependency
+      - cost_structure_mismatch
+      - financial_leverage
+      - ownership_or_portfolio_neglect
+      - market_or_demographic_shift
+      - failed_transformation
+    sponsor_intervals:
+      - {start: 32, end: 38, sponsor: David mention}
+      - {start: 322, end: 383, sponsor: David}
+
+  e31CEPxSJaU:
+    subject: Crocs
+    case_role: turnaround_counterexample
+    subject_type: company
+    industry: footwear
+    geography: Global
+    time_period: 2002-2026
+    failure_states:
+      - near_bankruptcy
+      - successful_turnaround
+      - renewed_diversification_risk
+    failure_mechanisms:
+      - overexpansion_or_overcapacity
+      - strategic_drift
+      - commoditization
+      - acquisition_or_integration_failure
+    sponsor_intervals:
+      - {start: 24, end: 29, sponsor: Monarch mention}
+      - {start: 294, end: 375, sponsor: Monarch}
+
+  dAp7D2ZX8Ik:
+    subject: Panda Express
+    case_role: resilience_counterexample
+    subject_type: company
+    industry: restaurants
+    geography: United States
+    time_period: 1973-2026
+    failure_states:
+      - avoided_mall_channel_decline
+      - sustained_growth
+      - pandemic_resilience
+    failure_mechanisms: []
+    sponsor_intervals:
+      - {start: 33, end: 37, sponsor: Xero mention}
+      - {start: 342, end: 402, sponsor: Xero}
+
+  3cQ20dNnmDA:
+    subject: Shark Tank
+    case_role: decline
+    subject_type: television_program
+    industry: media_and_entertainment
+    geography: United States
+    time_period: 2009-2026
+    failure_states:
+      - audience_decline
+      - cultural_relevance_decline
+      - participant_quality_decline
+      - key_person_departure
+    failure_mechanisms:
+      - adverse_selection
+      - success_induced_obsolescence
+      - identity_or_reputation_coupling
+      - stakeholder_betrayal
+      - market_or_demographic_shift
+    sponsor_intervals:
+      - {start: 24, end: 29, sponsor: Proton Mail mention}
+      - {start: 354, end: 425, sponsor: Proton Mail}
+
+  MPtnA6-LDzw:
+    subject: Cartoon Network
+    case_role: failure
+    subject_type: company
+    industry: media_and_entertainment
+    geography: United States
+    time_period: 1992-2024
+    failure_states:
+      - audience_decline
+      - creator_departure
+      - channel_shutdown
+      - cultural_relevance_decline
+    failure_mechanisms:
+      - short_term_optimization
+      - incentive_misalignment
+      - stakeholder_betrayal
+      - capability_erosion
+      - ownership_or_portfolio_neglect
+      - market_or_demographic_shift
+      - channel_or_platform_dependency
+      - failed_transformation
+    sponsor_intervals:
+      - {start: 338, end: 444, sponsor: Zapier}
+
+  4-8_etpRj1Y:
+    subject: Five Guys
+    case_role: decline
+    subject_type: company
+    industry: restaurants
+    geography: United States
+    time_period: 1986-2026
+    failure_states:
+      - store_closures
+      - traffic_decline
+      - value_perception_decline
+      - price_dependent_revenue
+    failure_mechanisms:
+      - cost_structure_mismatch
+      - unclear_positioning
+      - quality_or_value_erosion
+      - market_or_demographic_shift
+      - path_dependence
+      - overexpansion_or_overcapacity
+    sponsor_intervals:
+      - {start: 411, end: 470, sponsor: Near}
+
+  hwFIjOsWoCs:
+    subject: Applebee's
+    case_role: decline
+    subject_type: company
+    industry: restaurants
+    geography: United States
+    time_period: 1980-2026
+    failure_states:
+      - sustained_store_closures
+      - same_store_sales_decline
+      - cultural_relevance_decline
+      - market_share_loss
+    failure_mechanisms:
+      - unclear_positioning
+      - ownership_or_portfolio_neglect
+      - failed_transformation
+      - financial_leverage
+      - cost_structure_mismatch
+      - market_or_demographic_shift
+      - path_dependence
+    sponsor_intervals:
+      - {start: 18, end: 22, sponsor: Xero mention}
+      - {start: 209, end: 277, sponsor: Xero}
+
+  guxBwYjQ_GI:
+    subject: Topgolf
+    case_role: failure
+    subject_type: company
+    industry: sports_and_entertainment
+    geography: United States
+    time_period: 1997-2026
+    failure_states:
+      - same_store_sales_decline
+      - goodwill_impairment
+      - distressed_sale
+      - shareholder_value_loss
+    failure_mechanisms:
+      - acquisition_or_integration_failure
+      - overexpansion_or_overcapacity
+      - cost_structure_mismatch
+      - financial_leverage
+      - market_or_demographic_shift
+      - short_term_optimization
+    sponsor_intervals:
+      - {start: 37, end: 44, sponsor: Emergent mention}
+      - {start: 317, end: 415, sponsor: Emergent}
+
+  NfkzzB_EG5c:
+    subject: American Idol
+    case_role: partial_recovery
+    subject_type: television_program
+    industry: media_and_entertainment
+    geography: United States
+    time_period: 2002-2026
+    failure_states:
+      - audience_decline
+      - cancellation
+      - profitable_smaller_revival
+      - monoculture_loss
+    failure_mechanisms:
+      - channel_or_platform_dependency
+      - market_or_demographic_shift
+      - success_induced_obsolescence
+      - identity_or_reputation_coupling
+      - cost_structure_mismatch
+      - failed_transformation
+    sponsor_intervals:
+      - {start: 42, end: 48, sponsor: David mention}
+      - {start: 349, end: 405, sponsor: David}
+
+passage_overrides:
+  CU3xYnICJ0s-000167-000230:
+    add_failure_mechanisms: [short_term_optimization]
+    note: Ownership optimized Pizza Hut as a Pepsi sales channel rather than for long-term category strength.
+  CU3xYnICJ0s-000647-000712:
+    add_failure_mechanisms: [unclear_positioning]
+    add_causal_roles: [mechanism]
+    note: The passage explicitly describes Pizza Hut as stuck in the middle.
+  CU3xYnICJ0s-000712-000780:
+    add_failure_mechanisms: [path_dependence]
+    note: Franchise footprint and financing choices constrained later adaptation.
+  CU3xYnICJ0s-000944-001004:
+    add_failure_mechanisms: [short_term_optimization]
+    note: The narrator contrasts private-equity hold periods with long-term restaurant stewardship.
+  KhoAf9K9JC8-000240-000289:
+    add_failure_mechanisms: [short_term_optimization, stakeholder_betrayal]
+    note: The two-tier wage decision traded long-term labor trust for near-term savings.
+  KhoAf9K9JC8-000855-000924:
+    add_failure_mechanisms: [unclear_positioning]
+    note: The passage describes American caught between premium and low-cost competitors.
+  KhoAf9K9JC8-001113-001178:
+    add_failure_mechanisms: [financial_leverage]
+    note: The passage explicitly connects debt service, weak reinvestment, and customer decline.
+  eX9ZC5k7XdI-000239-000299:
+    add_failure_mechanisms: [mission_loss]
+    note: The passage identifies failure to define a new mission after the moon landing.
+  eX9ZC5k7XdI-000358-000423:
+    add_failure_mechanisms: [mission_loss]
+    note: The mission-accomplished trap is the central mechanism in this passage.
+  eX9ZC5k7XdI-000543-000607:
+    add_failure_mechanisms: [mission_loss]
+    note: Institutional self-preservation replaces the external mission.
+  eX9ZC5k7XdI-000669-000735:
+    add_failure_mechanisms: [feedback_suppression]
+    add_causal_roles: [warning_signal]
+    note: Engineering warnings were overruled by management before Challenger.
+  eX9ZC5k7XdI-000735-000806:
+    add_failure_mechanisms: [feedback_suppression]
+    note: Repeated O-ring warnings were accepted rather than acted upon.
+  eX9ZC5k7XdI-001303-001380:
+    add_failure_mechanisms: [incentive_misalignment]
+    note: Cost-plus and fixed-price contracts create opposing incentives.
+  hKZM21muITg-000249-000322:
+    add_failure_mechanisms: [channel_or_platform_dependency]
+    note: QVC and HSN were explicitly tied to cable distribution as that channel declined.
+  MPtnA6-LDzw-000829-000898:
+    add_failure_mechanisms: [channel_or_platform_dependency]
+    note: The passage explicitly connects Cartoon Network's decline to cable dependence and streaming substitution.
+  NfkzzB_EG5c-000479-000552:
+    add_failure_mechanisms: [channel_or_platform_dependency]
+    note: American Idol depended on a broadcast monoculture that fragmented with the internet.
+  NfkzzB_EG5c-000676-000734:
+    add_failure_mechanisms: [channel_or_platform_dependency]
+    note: The passage explicitly explains the decline of media and music gatekeepers.
+  e31CEPxSJaU-000845-000922:
+    add_failure_mechanisms: [acquisition_or_integration_failure]
+    note: Crocs' HeyDude purchase is presented as a possible repeat of its earlier diversification failure.
+  guxBwYjQ_GI-000493-000551:
+    add_failure_mechanisms: [acquisition_or_integration_failure]
+    note: The proposed Callaway-Topgolf flywheel did not match actual customer behavior.
+  guxBwYjQ_GI-000936-001009:
+    add_failure_mechanisms: [acquisition_or_integration_failure]
+    note: The passage ties the acquisition to a goodwill write-down and distressed sale.
+  4-8_etpRj1Y-000538-000607:
+    add_failure_mechanisms: [unclear_positioning]
+    note: Five Guys is explicitly described as caught between affordable fast food and premium dining.
+  hwFIjOsWoCs-000822-000889:
+    add_failure_mechanisms: [unclear_positioning]
+    note: Applebee's is explicitly described as undifferentiated and stuck in the middle.

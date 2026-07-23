@@ -6,6 +6,25 @@ Designed for product managers, coaches, and trainers who need to understand a co
 
 ---
 
+## Current project state
+
+The original company-intelligence report workflow remains intact. An
+experimental topical-intelligence workflow now captures a bounded playlist,
+creates versioned transcript enrichment, builds a source-linked retrieval
+index, and exports portable study data.
+
+The current business-failures calibration checkpoint contains 20 transcribed
+cases from a 121-video playlist queue, 388 labeled passages, 54 excluded sponsor
+passages, and 334 searchable passages. The next work is review and learning
+design—not another capture batch.
+
+For an evidence-backed implementation inventory and cold-start handoff, read
+[`docs/current-state.md`](docs/current-state.md). Contributors and coding agents
+should begin with [`AGENTS.md`](AGENTS.md), then use
+[`ROADMAP.md`](ROADMAP.md) for the approved phase sequence.
+
+---
+
 ## What you get
 
 A report with ten sections, each backed by verbatim quotes from the source videos:
@@ -162,6 +181,67 @@ python3 agent.py https://www.youtube.com/@CompanyA/videos
 python3 agent.py https://www.youtube.com/@CompanyB/videos
 python3 agent.py https://www.youtube.com/playlist?list=PLxxxxxxxxxxxxxxx
 ```
+
+---
+
+## Experimental: capture a topical corpus
+
+Topical mode captures source material for a knowledge base without applying the company-intelligence report questions to it.
+
+Capture or resume the current twenty-video calibration set:
+
+```bash
+python3 agent.py \
+  --mode topic \
+  --topic "Business failures" \
+  --limit 20 \
+  --whisper-model small.en \
+  "https://www.youtube.com/playlist?list=PLZ6vahBdAJ3iArMOb5Mrpav98SjW9dsaz"
+```
+
+This creates resumable audio, raw transcripts, timestamped subtitles, canonical Markdown transcripts, and a corpus manifest under `.workspace/topics/business-failures/`. Running the same command again skips completed downloads and transcriptions.
+
+Enrich the transcripts with the reviewed taxonomy, build the disposable local
+index, create portable study files, and try a question:
+
+```bash
+bash setup-topic.sh
+.venv-topic/bin/python topic_corpus.py enrich --label-with-llm
+.venv-topic/bin/python topic_corpus.py index
+.venv-topic/bin/python topic_corpus.py export
+.venv-topic/bin/python topic_corpus.py query "How did short-term incentives undermine long-term health?"
+```
+
+Run the ten-question retrieval check:
+
+```bash
+.venv-topic/bin/python topic_corpus.py evaluate
+```
+
+Run the twenty-video calibration check:
+
+```bash
+.venv-topic/bin/python topic_corpus.py evaluate \
+  --questions evaluations/business-failures-calibration-questions.yaml \
+  --output reports/topics/business-failures-calibration-evaluation.md
+```
+
+The export command creates CSV, JSONL, and Parquet study files. Open
+[`notebooks/business-failures-exploration.ipynb`](notebooks/business-failures-exploration.ipynb)
+locally, in Google Colab, or in Google Antigravity to inspect cases, labels,
+review samples, and candidate teaching themes.
+
+For local Jupyter, run `bash setup-topic.sh`, open the notebook, and select
+**YT Channel Intelligence (topic)** from the kernel picker. This keeps Jupyter
+on the same Python environment that contains pandas, PyArrow, and the topical
+retrieval dependencies.
+
+This is currently a research spike, not a finished domain-truth engine. See
+[Business Failures Topical Intelligence Spike](docs/topical-intelligence/business-failures-spike.md)
+for the provisional taxonomy and measured retrieval results, and
+[Topical Corpus Scale and Learning Plan](docs/topical-intelligence/scale-and-learning-plan.md)
+for the proposed batching, queue, parallelism, relabeling, pedagogy, and
+notebook path.
 
 ---
 

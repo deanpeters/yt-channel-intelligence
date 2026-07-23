@@ -1,133 +1,218 @@
-# CLAUDE.md — Channel Intelligence Agent
+# CLAUDE.md — Channel Intelligence
 
-## What this project does
+## Product purpose
 
-Takes a YouTube channel URL and produces a structured competitive intelligence report aimed at product managers preparing for meetings. One command in, one report out.
+Channel Intelligence turns public long-form media into attributable
+intelligence for Product Managers, product leaders, consultants, trainers, and
+analysts.
 
-## Primary user
+It has two implemented modes:
 
-Product managers preparing for meetings, building competitive intelligence, or creating training material. Not engineers, not data scientists. Design everything accordingly.
+1. **Company intelligence** produces a structured competitive-intelligence
+   report from a company's recent YouTube material.
+2. **Topical intelligence** turns a bounded playlist into a versioned,
+   searchable, portable learning corpus.
+
+Topical intelligence is the foundation for a later multi-source domain
+intelligence mode. Read `docs/current-state.md` for the live checkpoint and
+`ROADMAP.md` for the approved phase sequence.
 
 ## Outcome focus
 
-**The end game is insights for product managers and executives. All technical decisions are in service of that outcome — not the other way around.**
+**The end game is useful, traceable insight. All technical decisions serve that
+outcome—not the other way around.**
 
-Before adding complexity, ask: does this make reports better, faster to get, or easier to act on? If not, it doesn't belong here.
+Before adding complexity, ask:
 
-In practice:
-- Frame roadmap items and doc copy around the PM benefit first, tech second
-- Prioritize synthesis quality above pipeline efficiency — a slow report with great insights beats a fast one with shallow data
-- When design choices conflict, default to "what serves the PM in the room with a competitor"
+- Does this make the resulting intelligence better, faster to obtain, easier
+  to inspect, or safer to trust?
+- Does it preserve context and provenance?
+- Can a capable non-specialist run and understand it?
+- Can another agent resume the work without reconstructing hidden decisions?
+
+## Architecture boundary
+
+The two modes share source capture but remain separate products:
+
+```text
+                         +-> company analysis -> canvas -> report
+discover -> download -> transcribe
+                         +-> canonical corpus -> enrichment -> index -> study
+```
+
+Do not replace the company report pipeline with retrieval. Do not force topical
+cases into company-oriented report fields. Share the capture infrastructure and
+source metadata; keep downstream analysis purpose-built.
 
 ## Design principles
 
-- `reports/` is the only directory the user ever opens
-- All pipeline scratch data (audio, transcripts, SQLite) lives in `.workspace/` — hidden by default in Finder and Explorer
-- When the tool finishes, print exactly one line telling the user where their report is
-- CLI output is plain English progress, not technical log noise
-- Never require the user to navigate into nested directories to find output
+- Reports and notebooks are user surfaces; `.workspace/` is operational state.
+- CLI progress should be plain English, not internal log noise.
+- Raw source text is immutable.
+- Generated labels, causal roles, and interpretations live in a versioned
+  enrichment layer.
+- Every passage retains video ID, title, date, URL, and timestamps.
+- Sponsor passages never enter the retrieval index.
+- Chroma is disposable and rebuildable.
+- Taxonomy changes should require relabeling or reindexing, never redownloading.
+- Evaluation suites are evidence, not targets to game.
+- One-channel patterns are provisional until corroborated elsewhere.
+- Secrets come only from environment variables.
 
-## Directory structure
+## Repository map
 
-```
+```text
 yt-channel-intelligence/
-├── CLAUDE.md               # this file
-├── README.md               # user-facing docs
-├── SETUP.md                # first-time setup guide (OpenAI key, dependencies)
-├── USING-YOUR-REPORT.md    # PM guide to reading and acting on reports
-├── ROADMAP.md              # Now / Next / Later feature roadmap
-├── config.py               # all configuration variables
-├── agent.py                # CLI entrypoint
-├── db.py                   # SQLite helpers (scoped per company)
+├── AGENTS.md                     # agent start-here and verification contract
+├── CLAUDE.md                     # architecture and implementation guidance
+├── README.md                     # user-facing setup and workflows
+├── ROADMAP.md                    # approved phases and feature horizons
+├── SETUP.md                      # company-mode setup
+├── USING-YOUR-REPORT.md          # company-report usage guide
+├── docs/
+│   ├── current-state.md          # restart-ready implementation checkpoint
+│   └── topical-intelligence/
+│       ├── business-failures-spike.md
+│       └── scale-and-learning-plan.md
+├── evaluations/                  # fixed and expansion retrieval suites
+├── notebooks/                    # portable topical-analysis notebook
+├── topics/                       # versioned taxonomy configuration
+├── tests/                        # queue and retrieval-intent tests
+├── agent.py                      # capture CLI for company and topic modes
+├── topic_corpus.py               # topical enrichment/index/query/export CLI
+├── db.py                         # queue, state, retries, and attempt history
 ├── phases/
-│   ├── discover.py         # yt-dlp metadata fetch + date filter
-│   ├── download.py         # audio-only download via yt-dlp -x
-│   ├── transcribe.py       # calls `whisper` subprocess
-│   ├── synthesize.py       # OpenAI API: per-video → cross-video report
-│   └── synthesize.template.md  # prompt design doc and canonical examples
-├── setup.sh                # Mac first-time setup script
-├── setup.bat               # Windows first-time setup script
-├── reports/                # ← user opens this; one .md file per company run
-└── .workspace/             # hidden scratch space — user never touches this
-    └── <company-slug>/
-        ├── audio/
-        ├── transcripts/
-        ├── channel.db
-        └── canvas-<date>.json  # machine-readable canvas for compare/RAG
+│   ├── discover.py
+│   ├── download.py
+│   ├── transcribe.py
+│   ├── synthesize.py
+│   ├── topic.py
+│   ├── topic_enrich.py
+│   ├── topic_export.py
+│   └── topic_retrieval.py
+├── setup.sh / setup.bat          # company workflow setup
+├── setup-topic.sh                # isolated topical environment and kernel
+├── requirements-topic.txt
+├── reports/                      # ignored generated output
+└── .workspace/                   # ignored local corpus and operational state
 ```
 
-## Key configuration variables (`config.py`)
+## Company-intelligence workflow
 
-| Variable | Default | Notes |
-|---|---|---|
-| `LOOKBACK_MONTHS` | `30` | How far back to pull videos (~2.5 years). Always computed dynamically from today's date — never hardcode a year. |
-| `WHISPER_MODEL` | `medium.en` | Options: tiny.en, base.en, small.en, medium.en, large-v3 |
-| `AUDIO_FORMAT` | `m4a` | Audio container for yt-dlp extraction |
-| `LLM_MODEL` | `gpt-4o-mini` | Model used for synthesis phases |
-| `DATA_DIR` | `.workspace` | Root for all pipeline scratch data |
-| `REPORTS_DIR` | `reports` | Where final reports land |
+1. Discover recent substantive videos using a rolling lookback.
+2. Download audio.
+3. Transcribe with Whisper.
+4. Analyze each video into structured signals through LiteLLM.
+5. Synthesize the signals into a cross-video canvas.
+6. Render a Markdown report.
 
-## System dependencies (pre-installed on user's machine)
+The report contract requires attributable evidence for factual claims.
+`not_saying` is the explicit inference-about-absence exception. The current
+sample report predates the strongest form of this contract and is scheduled for
+repair in Phase 1.
 
-- `yt-dlp` — video/audio download
-- `whisper` — Whisper wrapper at `~/bin/whisper`; usage: `whisper <file> [--fast] [--model tiny.en|base.en|small.en|medium.en|large-v3] [--output-dir <dir>]`
-- `ffmpeg` — audio processing
-- `python3` (3.13)
+## Topical-intelligence workflow
 
-## Pipeline phases
+1. Materialize playlist metadata into the durable SQLite queue.
+2. Apply a capture boundary such as `--limit 20`.
+3. Download with a small, configurable worker pool and randomized delays.
+4. Transcribe serially by default.
+5. Build canonical Markdown transcripts and a corpus manifest.
+6. Apply sponsor detection plus case- and passage-level labels.
+7. Build a separate Chroma collection for each taxonomy version.
+8. Query with hybrid semantic and taxonomy-aware ranking.
+9. Run fixed and expansion evaluations.
+10. Export CSV, JSONL, and Parquet for notebooks and other analysis tools.
 
-1. **Discover** — `yt-dlp --flat-playlist --dump-json`, filtered by `--dateafter` computed from `LOOKBACK_MONTHS`
-2. **Download** — `yt-dlp -x --audio-format m4a` per video; skips already-downloaded
-3. **Transcribe** — `transcribe <audio> --model medium.en --output-dir ...` per file; skips already-transcribed
-4. **Synthesize** — two OpenAI `gpt-4o-mini` passes. Role is "strategic advisor for PM leaders" — produce insights, not data summaries. Every claim requires a verbatim quote anchor.
-   - Pass 1: per-video structured JSON with 8 keys: `customer_problems`, `product_philosophy`, `strategic_bets`, `market_framing`, `competitive_signals`, `customer_voices`, `notable_quotes`, `product_mentions`.
-   - Pass 2: cross-video canvas with a top-level `executive_summary` prose block plus 9 fixed sections: `product_line` (exhaustive inventory), `problem_obsession`, `building_for`, `how_they_decide`, `placing_bets`, `category_framing`, `momentum_tone` (ON OFFENSE / ON DEFENSE verdict), `whats_shifted`, `not_saying` (most valuable section — name the absence, state the strategic implication). Canvas saved to `.workspace/<slug>/canvas-<date>.json`; human report rendered from canvas and saved to `reports/`.
-   - Collapse aggressively: one claim with `signal_strength 15` beats fifteen claims with `signal_strength 1`.
-   - Renderer filters any evidence item whose quote starts with "no quote" (case-insensitive).
+## Queue and state
 
-## SQLite state machine
+The SQLite video state machine supports:
 
-Each video row: `video_id | title | published | duration | status | audio_path | transcript_path | summary_json`
+```text
+discovered
+  -> downloading -> downloaded
+  -> transcribing -> transcribed
 
-Status flow: `discovered → downloaded → transcribed → analyzed`
+download_failed / transcription_failed
+  -> retry after next_retry_at
+```
 
-Re-running the agent skips any video already at or past a given stage.
+`capture_attempts` is append-only history. Video records retain transition
+times, errors, worker IDs, heartbeats, and retry timing. Discovery refreshes
+must not reset completed states.
 
-## Date handling
+Company analysis continues from `transcribed` to `analyzed`.
 
-All date filters must be computed dynamically from `LOOKBACK_MONTHS` and `datetime.now()`. Never hardcode a year. When building search queries that need recency, use a rolling window that always ends at the current year.
+## Topical data model
+
+Keep these layers separate:
+
+```text
+immutable source
+  -> canonical transcript
+  -> versioned enrichment
+  -> disposable retrieval index
+  -> derived learning artifacts
+```
+
+The business-failures taxonomy is currently `0.3-workup`. It includes failure
+mechanisms, causal roles, passage labels, sponsor boundaries, and `case_role`
+values that distinguish failures from turnaround and resilience
+counterexamples.
+
+## Local environments
+
+Company mode uses the main Python/system setup described in `SETUP.md`.
+
+Topical retrieval uses `.venv-topic`:
+
+```bash
+bash setup-topic.sh
+```
+
+The setup also registers the Jupyter kernel:
+
+```text
+YT Channel Intelligence (topic)
+```
+
+Use that kernel locally. The notebook can also read exported data in Google
+Colab or Google Antigravity.
 
 ## LLM provider
 
-The tool uses [LiteLLM](https://github.com/BerriAI/litellm) for all LLM calls — a unified wrapper that routes to OpenAI, Anthropic, Google, Ollama, or any other provider based on the `LLM_MODEL` string. No per-provider if/else logic in the code.
+LiteLLM provides the provider-neutral interface. `LLM_MODEL` selects the model;
+provider credentials remain environment variables. Do not add per-provider
+branches unless LiteLLM cannot support a required behavior.
 
-`LLM_MODEL` defaults to `gpt-4o-mini` and can be overridden via environment variable:
+## Security and repository hygiene
 
-| Provider | `LLM_MODEL` | API key env var |
-|---|---|---|
-| OpenAI (default) | `gpt-4o-mini` | `OPENAI_API_KEY` |
-| Anthropic | `anthropic/claude-haiku-4-5` | `ANTHROPIC_API_KEY` |
-| Google | `gemini/gemini-1.5-flash` | `GEMINI_API_KEY` |
-| Ollama (local) | `ollama/llama3.2` | *(none)* |
+Never commit:
 
-All secrets must come from environment variables — never hardcoded in any file.
+- API keys, tokens, credentials, or `.env` files
+- `.workspace/`
+- raw audio or transcripts
+- SQLite databases
+- Chroma indexes
+- generated reports
+- `.venv-topic/`
 
-## Security
+This repository is public. Treat every staged file as publishable material:
+verify ignored local data, scan for credentials, and review the staged diff
+before pushing.
 
-All secrets (API keys) come from environment variables only. No `.env` files, no hardcoded strings, no secrets in any committed file.
+## Required verification
 
-## .gitignore
+For code or architecture changes:
 
-`.workspace/` must be in `.gitignore` — it holds audio files and will be gigabytes in size. Also excludes `reports/`, `__pycache__/`, `*.pyc`, `.DS_Store`, and `.claude/`.
+```bash
+python3 -m compileall -q agent.py db.py phases topic_corpus.py
+python3 -m unittest discover -s tests -v
+git diff --check
+```
 
-## Roadmap
+For topical changes, also rebuild the relevant derived layer and run both
+retrieval suites when the local corpus is available.
 
-See `ROADMAP.md` for the Now / Next / Later feature plan. Current priority order within **Now**:
-1. Smaller audio files (16kHz mono, 60–75% storage reduction) — do this first
-2. Parallel downloads and transcription — compounds the size gains
-3. Incremental updates (track last-run date per company)
-
-## Example company
-
-Productside — `https://www.youtube.com/@productside/videos`
-Product management training and coaching company. Used as the reference example throughout docs and tests.
+Update `docs/current-state.md` after a meaningful change. Report validation
+results honestly; do not hide regressions caused by corpus growth.
