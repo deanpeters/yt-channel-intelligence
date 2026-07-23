@@ -1,8 +1,14 @@
 # Current State and Restart Guide
 
-**Checkpoint:** Phase 0 complete. Phase 2 tooling committed: retrieval
-scoping and the stratified label-review harness are implemented (the human
-label audit and taxonomy-bump decision are still pending). Phase 3 complete:
+**Checkpoint:** Phase 0 complete. Phase 2 complete: retrieval scoping and the
+stratified label-review harness are implemented, a first-pass label audit
+(stratified sample, seed 11) was run, and the taxonomy-bump decision is
+resolved. The audit found the machine labeler's main weakness — negative
+failure mechanisms applied to strength, rise, and counterexample passages —
+and corrected nine egregious cases via `passage_overrides` (now 31 curated
+overrides). The 27-mechanism vocabulary is adequate, so the taxonomy stays
+`0.3-workup`; label errors are individual assignment fixes, not a vocabulary
+change. Phase 3 complete:
 the deterministic learning layer (case cards, causal chains, pattern matrix),
 the citation-validated LLM teaching-notes prose layer, and the pedagogic
 evaluation (all gating checks passing) are implemented.

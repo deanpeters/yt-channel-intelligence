@@ -586,3 +586,35 @@ passage_overrides:
   hwFIjOsWoCs-000822-000889:
     add_failure_mechanisms: [unclear_positioning]
     note: Applebee's is explicitly described as undifferentiated and stuck in the middle.
+  # v0.3 label audit (stratified sample, seed 11): egregious category errors
+  # where negative mechanisms were applied to strength/rise/counterexample
+  # passages, or a clearly wrong mechanism was assigned.
+  eX9ZC5k7XdI-000806-000880:
+    remove_failure_mechanisms: [quality_or_value_erosion]
+    note: Feynman's O-ring demonstration is engineering evidence, not brand or value erosion.
+  JwqbWp3738o-000692-000755:
+    remove_failure_mechanisms: [incentive_misalignment]
+    add_failure_mechanisms: [identity_or_reputation_coupling]
+    note: The stock drop tracks the Twitter acquisition and Musk's attention, not a misaligned incentive.
+  v8w6djdUt1U-001104-001166:
+    remove_failure_mechanisms: [success_induced_obsolescence]
+    add_failure_mechanisms: [market_or_demographic_shift]
+    note: Passage contrasts international versus US revenue mix, a market shift, not self-obsolescence.
+  31oqfd8myBI-001002-001073:
+    remove_failure_mechanisms: [normalization_of_deviance]
+    note: Competitors unbundling Craigslist's verticals is not normalization of deviance.
+  dAp7D2ZX8Ik-000586-000653:
+    remove_failure_mechanisms: [strategic_drift]
+    note: Passage describes Panda's decisiveness and agility (a strength); Panda is a resilience counterexample.
+  3cQ20dNnmDA-000162-000229:
+    remove_failure_mechanisms: [normalization_of_deviance]
+    note: Passage critiques the show's format artificiality, not normalization of deviance.
+  MPtnA6-LDzw-000135-000201:
+    remove_failure_mechanisms: [quality_or_value_erosion]
+    note: Passage describes a clever advertiser-funded R&D strategy (a strength), not value erosion.
+  MPtnA6-LDzw-000201-000270:
+    remove_failure_mechanisms: [governance_failure]
+    note: Passage describes the creative freedom that built Adult Swim (a strength), not governance failure.
+  4-8_etpRj1Y-000127-000187:
+    remove_failure_mechanisms: [quality_or_value_erosion]
+    note: Passage describes successful early product-led marketing (a strength), not value erosion.
