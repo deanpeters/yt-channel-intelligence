@@ -1,0 +1,6 @@
+# Dependencies for topical capture (download + Whisper transcription).
+# Used by setup-capture.sh to build the .venv-capture environment.
+yt-dlp
+openai-whisper
+litellm
+pyyaml>=6,<7

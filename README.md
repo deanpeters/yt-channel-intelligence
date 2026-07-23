@@ -188,7 +188,21 @@ python3 agent.py https://www.youtube.com/playlist?list=PLxxxxxxxxxxxxxxx
 
 Topical mode captures source material for a knowledge base without applying the company-intelligence report questions to it.
 
-Capture or resume the current twenty-video calibration set:
+The easiest way to capture (or resume) a batch is the standalone capture
+scripts, which you can run outside any agent session — for example overnight or
+whenever you want the next batch:
+
+```bash
+bash setup-capture.sh                     # one-time: build the capture venv
+bash capture-topic.sh "https://www.youtube.com/playlist?list=PLZ6vahBdAJ3iArMOb5Mrpav98SjW9dsaz" 35
+```
+
+The second argument is the playlist position to capture up to (`35` captures
+through video 35, skipping anything already done). It downloads, transcribes,
+and does one automatic mop-up pass to recover transient download failures. Safe
+to re-run: completed videos are skipped and the queue resumes where it left off.
+
+Under the hood this runs the same capture pipeline directly:
 
 ```bash
 python3 agent.py \
