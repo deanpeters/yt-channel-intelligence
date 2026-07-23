@@ -15,12 +15,12 @@ evaluation (all gating checks passing) are implemented. Phase 4 complete:
 source-backed answer synthesis (`answer`) writes cited, inference-labeled
 answers over scoped retrieval; a corroboration pilot (`corroborate`)
 cross-checks one case (FTX) against an independent public-record second source
-and enforces the naming gate. Phase 5 first batch complete: playlist positions
-21-35 were captured, drafted into case configs with `draft-cases`, reviewed,
-and integrated. The corpus is now 35 cases and 584 indexed passages (83 sponsor
-passages excluded). Retrieval evals held stable across the near-doubling (fixed
-regression 5/10, calibration 8/10), and corpus growth reduced provisional
-single-case mechanisms from four to one (only `adverse_selection` remains).
+and enforces the naming gate. Phase 5 batches complete: playlist positions
+21-50 were captured across two reviewed batches, drafted into case configs with
+`draft-cases`, reviewed, and integrated. The corpus is now 50 cases and 813
+indexed passages (106 sponsor passages excluded). Retrieval evals held stable
+across the tripling of the corpus (fixed regression 5/10, calibration 8/10),
+and only one single-case mechanism (`adverse_selection`) remains provisional.
 Phase 6 complete: `package` builds a portable, data-only archive (manifest,
 canonical transcripts, taxonomy, enrichment, exports, learning artifacts,
 evaluations, notebook) that excludes audio and the Chroma index and needs no

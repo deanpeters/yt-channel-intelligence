@@ -223,14 +223,14 @@ def _metadata(passage: dict) -> dict:
         "youtube_url": passage["youtube_url"],
         "taxonomy_version": passage["taxonomy_version"],
         "transcript_source": passage["transcript_source"],
-        "causal_roles": ",".join(labels["causal_roles"]),
-        "failure_mechanisms": ",".join(labels["failure_mechanisms"]),
-        "actors": ",".join(labels["actors"]),
-        "evidence_types": ",".join(labels["evidence_types"]),
+        "causal_roles": ",".join(labels.get("causal_roles") or []),
+        "failure_mechanisms": ",".join(labels.get("failure_mechanisms") or []),
+        "actors": ",".join(labels.get("actors") or []),
+        "evidence_types": ",".join(labels.get("evidence_types") or []),
         "epistemic_status": labels["epistemic_status"],
         "summary": labels["summary"],
-        "case_failure_mechanisms": ",".join(case["failure_mechanisms"]),
-        "failure_states": ",".join(case["failure_states"]),
+        "case_failure_mechanisms": ",".join(case.get("failure_mechanisms") or []),
+        "failure_states": ",".join(case.get("failure_states") or []),
     }
 
 

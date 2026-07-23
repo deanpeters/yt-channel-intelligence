@@ -790,6 +790,272 @@ cases:
       - {start: 84, end: 84, sponsor: Masterclass Executive}
       - {start: 507, end: 570, sponsor: Masterclass Executive}
 
+  # --- Batch 3 (playlist positions 36-50), drafted then reviewed ---
+  IK6bAiF0SAE:
+    subject: Meta
+    case_role: failure
+    subject_type: company
+    industry: technology
+    geography: Global
+    time_period: 2014-2026
+    failure_states:
+      - financial_loss
+      - declining_user_engagement
+      - failed_transformation
+    failure_mechanisms:
+      - path_dependence
+      - market_or_demographic_shift
+      - mission_loss
+      - capability_erosion
+    sponsor_intervals:
+      - {start: 85, end: 105, sponsor: Zapier}
+  eMctBbsRISE:
+    subject: Yahoo
+    case_role: failure
+    subject_type: company
+    industry: technology
+    geography: Global
+    time_period: 1995-2021
+    failure_states:
+      - sales_decline
+      - valuation_loss
+      - missed_opportunities
+    failure_mechanisms:
+      - strategic_drift
+      - ownership_or_portfolio_neglect
+      - mission_loss
+    sponsor_intervals:
+      - {start: 72, end: 73, sponsor: Delete Me}
+      - {start: 345, end: 366, sponsor: Delete Me}
+  wgh9oAce3hU:
+    subject: Augusta National Golf Club
+    case_role: resilience_counterexample
+    subject_type: company
+    industry: sports
+    geography: United States
+    time_period: 1933-2025
+    failure_states: []
+    failure_mechanisms: []
+    sponsor_intervals:
+      - {start: 69, end: 91, sponsor: Delete Me}
+      - {start: 291, end: 337, sponsor: Delete Me}
+  IkWBWyq5MEU:
+    subject: Spirit Airlines
+    case_role: failure
+    subject_type: company
+    industry: airlines
+    geography: United States
+    time_period: 1990-2026
+    failure_states:
+      - bankruptcy
+      - fleet_reduction
+      - loss_of_competition
+    failure_mechanisms:
+      - financial_leverage
+      - incentive_misalignment
+      - ownership_or_portfolio_neglect
+    sponsor_intervals:
+      - {start: 70, end: 80, sponsor: Monarch Money}
+      - {start: 789, end: 865, sponsor: Monarch}
+  mKWQxPX0Uso:
+    subject: Silicon Valley Bank
+    case_role: failure
+    subject_type: company
+    industry: technology
+    geography: United States
+    time_period: 1983-2023
+    failure_states:
+      - bankruptcy
+      - regulatory_seizure
+      - loss_of_deposits
+    failure_mechanisms:
+      - incentive_misalignment
+      - governance_failure
+      - financial_leverage
+    sponsor_intervals:
+      - {start: 21, end: 42, sponsor: Nord Protect}
+      - {start: 459, end: 506, sponsor: Nord Protect}
+  DxZSCVbwrgo:
+    subject: Saks Fifth Avenue
+    case_role: failure
+    subject_type: company
+    industry: retail
+    geography: United States
+    time_period: 1867-2026
+    failure_states:
+      - bankruptcy
+      - sales_decline
+      - financial_crisis
+    failure_mechanisms:
+      - strategic_drift
+      - financial_leverage
+      - ownership_or_portfolio_neglect
+      - short_term_optimization
+      - market_or_demographic_shift
+    sponsor_intervals: []
+  wFoKI5SxTHQ:
+    subject: Wish.com
+    case_role: failure
+    subject_type: company
+    industry: retail
+    geography: Global
+    time_period: 2010-2024
+    failure_states:
+      - bankruptcy
+      - sales_decline
+      - loss_of_customer_loyalty
+    failure_mechanisms:
+      - channel_or_platform_dependency
+      - cost_structure_mismatch
+      - quality_or_value_erosion
+      - market_or_demographic_shift
+    sponsor_intervals:
+      - {start: 22, end: 42, sponsor: Jen Spark}
+      - {start: 475, end: 522, sponsor: GenSpark}
+  6reYRXABB4A:
+    subject: Kmart
+    case_role: failure
+    subject_type: company
+    industry: retail
+    geography: United States
+    time_period: 1899-2026
+    failure_states:
+      - bankruptcy
+      - sales_decline
+      - store_closure
+    failure_mechanisms:
+      - strategic_drift
+      - cost_structure_mismatch
+      - ownership_or_portfolio_neglect
+      - capability_erosion
+    sponsor_intervals:
+      - {start: 0, end: 24, sponsor: Fabric by Gerber Life}
+      - {start: 250, end: 293, sponsor: Fabric by Gerber Life}
+  jFxeKBaOvmg:
+    subject: Papa John's
+    case_role: decline
+    subject_type: company
+    industry: restaurants
+    geography: United States
+    time_period: 1984-2024
+    failure_states:
+      - sales_decline
+      - reputation_crisis
+      - loss_of_market_share
+    failure_mechanisms:
+      - identity_or_reputation_coupling
+      - strategic_drift
+      - quality_or_value_erosion
+    sponsor_intervals:
+      - {start: 44, end: 66, sponsor: Plod}
+      - {start: 242, end: 304, sponsor: Plaud}
+  kxvjz5h48Pk:
+    subject: Amazon Fire Phone
+    case_role: failure
+    subject_type: product_brand
+    industry: technology
+    geography: United States
+    time_period: "2014-2015"
+    failure_states:
+      - sales_decline
+      - identity_or_reputation_coupling
+    failure_mechanisms:
+      - unclear_positioning
+      - mission_loss
+      - governance_failure
+    sponsor_intervals:
+      - {start: 44, end: 67, sponsor: Quo}
+      - {start: 531, end: 605, sponsor: Quo}
+  5-kMd4KhMdI:
+    subject: Apple Vision Pro
+    case_role: failure
+    subject_type: product_brand
+    industry: technology
+    geography: Global
+    time_period: 2023-2026
+    failure_states:
+      - sales_decline
+      - product_return
+      - market_rejection
+    failure_mechanisms:
+      - strategic_drift
+      - unclear_positioning
+      - cost_structure_mismatch
+      - market_or_demographic_shift
+    sponsor_intervals: []
+  mv6jRMuqr7U:
+    subject: Orange County Choppers
+    case_role: failure
+    subject_type: company
+    industry: motorcycles
+    geography: United States
+    time_period: 1999-2023
+    failure_states:
+      - bankruptcy
+      - sales_decline
+      - ownership_conflict
+    failure_mechanisms:
+      - strategic_drift
+      - governance_failure
+      - market_or_demographic_shift
+    sponsor_intervals: []
+  Fh20aiNwrbY:
+    subject: Wendy's
+    case_role: decline
+    subject_type: company
+    industry: restaurants
+    geography: United States
+    time_period: 1969-2026
+    failure_states:
+      - sales_decline
+      - leadership_instability
+      - customer_service_erosion
+    failure_mechanisms:
+      - governance_failure
+      - financial_leverage
+      - quality_or_value_erosion
+      - market_or_demographic_shift
+    sponsor_intervals:
+      - {start: 42, end: 45, sponsor: Dex}
+      - {start: 469, end: 509, sponsor: Dex}
+  7EJ4oS4Zkao:
+    subject: Xbox
+    case_role: decline
+    subject_type: product_brand
+    industry: technology
+    geography: Global
+    time_period: 1999-2026
+    failure_states:
+      - sales_decline
+      - market_share_loss
+      - product_reputation_damage
+    failure_mechanisms:
+      - strategic_drift
+      - unclear_positioning
+      - incentive_misalignment
+      - market_or_demographic_shift
+    sponsor_intervals:
+      - {start: 546, end: 589, sponsor: Zapier}
+  ywtHrALthKE:
+    subject: The Washington Post
+    case_role: decline
+    subject_type: company
+    industry: media
+    geography: United States
+    time_period: 1971-2026
+    failure_states:
+      - staff_layoffs
+      - revenue_decline
+      - subscriber_loss
+    failure_mechanisms:
+      - market_or_demographic_shift
+      - cost_structure_mismatch
+      - mission_loss
+      - governance_failure
+    sponsor_intervals:
+      - {start: 82, end: 110, sponsor: sponsor}
+      - {start: 326, end: 370, sponsor: sponsor}
+
 passage_overrides:
   CU3xYnICJ0s-000167-000230:
     add_failure_mechanisms: [short_term_optimization]
