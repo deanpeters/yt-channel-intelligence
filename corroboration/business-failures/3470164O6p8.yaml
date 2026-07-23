@@ -1,0 +1,30 @@
+# Independent corroboration reference for the FTX case.
+# These facts come from public record (court filings, DOJ, news reporting),
+# independent of the YouTube source the corpus was built from. They are the
+# "second source" for the Phase 4 corroboration pilot.
+case: 3470164O6p8
+subject: FTX
+source: Independent public record (DOJ, Delaware bankruptcy filings, news reporting)
+facts:
+  - fact: >-
+      FTX.com, FTX US, Alameda Research, and roughly 130 affiliated companies
+      filed for Chapter 11 bankruptcy protection in Delaware on November 11,
+      2022, and Sam Bankman-Fried resigned as CEO.
+    citation: https://coincodex.com/article/21125/ftx-files-for-chapter-11-bankruptcy-sam-bankman-fried-resigns-as-ceo
+  - fact: >-
+      Sam Bankman-Fried was convicted in November 2023 on seven counts of fraud
+      and conspiracy.
+    citation: https://legalclarity.org/samuel-bankman-fried-case-crimes-lawsuit-and-appeal/
+  - fact: >-
+      The fraud centered on diverting billions of dollars of FTX customer funds
+      to the affiliated trading firm Alameda Research; court records show
+      roughly an $8 billion shortfall in customer funds.
+    citation: https://www.cnbc.com/2024/02/10/as-sam-bankman-fried-awaits-jail-ftx-customers-await-full-repayment.html
+  - fact: >-
+      Bankman-Fried was sentenced to 25 years in federal prison.
+    citation: https://legalclarity.org/samuel-bankman-fried-case-crimes-lawsuit-and-appeal/
+  - fact: >-
+      The FTX bankruptcy estate later expected to fully repay customers and
+      creditors with legitimate claims, a nuance not emphasized in the original
+      corpus source.
+    citation: https://www.cnbc.com/2024/02/10/as-sam-bankman-fried-awaits-jail-ftx-customers-await-full-repayment.html

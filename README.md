@@ -301,6 +301,28 @@ flagged provisional):
 .venv-topic/bin/python topic_corpus.py evaluate-learning
 ```
 
+Synthesize a source-backed answer. Retrieval (optionally scoped) selects the
+passages; the answer cites them by evidence tag, marks each claim
+source-supported or analyst-inference, and puts anything the evidence does not
+establish into a limitations section. Citations are validated against the
+retrieved passages:
+
+```bash
+.venv-topic/bin/python topic_corpus.py answer \
+  "What warning signs appeared before these businesses declined?"
+```
+
+Corroborate one case against an independent second source. Provide a reference
+file of publicly-sourced facts under `corroboration/<corpus>/<video-id>.yaml`;
+the check labels each corpus mechanism corroborated, uncorroborated, or
+contradicted, surfaces facts the corpus omits, and reports corroboration
+coverage. Until coverage is broad, the corpus is a single-channel topical
+corpus, not domain intelligence:
+
+```bash
+.venv-topic/bin/python topic_corpus.py corroborate FTX
+```
+
 The export command creates CSV, JSONL, and Parquet study files. Open
 [`notebooks/business-failures-exploration.ipynb`](notebooks/business-failures-exploration.ipynb)
 locally, in Google Colab, or in Google Antigravity to inspect cases, labels,

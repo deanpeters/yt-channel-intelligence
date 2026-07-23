@@ -11,7 +11,12 @@ overrides). The 27-mechanism vocabulary is adequate, so the taxonomy stays
 change. Phase 3 complete:
 the deterministic learning layer (case cards, causal chains, pattern matrix),
 the citation-validated LLM teaching-notes prose layer, and the pedagogic
-evaluation (all gating checks passing) are implemented.
+evaluation (all gating checks passing) are implemented. Phase 4 complete:
+source-backed answer synthesis (`answer`) writes cited, inference-labeled
+answers over scoped retrieval; a corroboration pilot (`corroborate`)
+cross-checks one case (FTX) against an independent public-record second source
+and enforces the naming gate — with 1/20 cases corroborated, the corpus is
+explicitly not yet domain intelligence.
 
 **Updated:** 2026-07-23
 

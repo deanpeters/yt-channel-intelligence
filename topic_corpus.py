@@ -21,6 +21,21 @@ from phases.topic_review import (
 from phases.topic_learning import build_learning_layer
 from phases.topic_teaching import build_teaching_layer
 from phases.topic_pedagogy import evaluate_pedagogy
+from phases.topic_synthesis import render_answer_md, synthesize_answer
+from phases.topic_corroboration import run_corroboration
+
+
+def _scope_from_args(args):
+    video_ids = None
+    if args.case:
+        video_ids = resolve_case_tokens(load_topic_config(args.config), args.case)
+    return build_scope_filter(
+        industries=args.industry,
+        case_roles=args.case_role,
+        video_ids=video_ids,
+        playlist_min=args.playlist_min,
+        playlist_max=args.playlist_max,
+    )
 
 
 def _print_hits(hits: list[dict]) -> None:
@@ -149,36 +164,60 @@ def main():
         default="reports/topics/business-failures-pedagogy-evaluation.md",
     )
 
+    def _add_scope_flags(parser):
+        parser.add_argument(
+            "--industry",
+            action="append",
+            metavar="NAME",
+            help="Limit to one or more industries (repeatable).",
+        )
+        parser.add_argument(
+            "--case-role",
+            action="append",
+            metavar="ROLE",
+            help="Limit to one or more case roles, e.g. failure (repeatable).",
+        )
+        parser.add_argument(
+            "--case",
+            action="append",
+            metavar="ID_OR_SUBJECT",
+            help="Limit to a video ID or subject substring, e.g. pizza (repeatable).",
+        )
+        parser.add_argument(
+            "--playlist-min",
+            type=int,
+            help="Limit to playlist positions at or after this index.",
+        )
+        parser.add_argument(
+            "--playlist-max",
+            type=int,
+            help="Limit to playlist positions at or before this index.",
+        )
+
     query = subparsers.add_parser("query")
     query.add_argument("question")
     query.add_argument("--results", type=int, default=6)
-    query.add_argument(
-        "--industry",
-        action="append",
-        metavar="NAME",
-        help="Limit to one or more industries (repeatable).",
+    _add_scope_flags(query)
+
+    answer = subparsers.add_parser("answer")
+    answer.add_argument("question")
+    answer.add_argument("--results", type=int, default=8)
+    answer.add_argument("--model", default=LLM_MODEL)
+    answer.add_argument(
+        "--output",
+        help="Write the answer to this Markdown file instead of stdout.",
     )
-    query.add_argument(
-        "--case-role",
-        action="append",
-        metavar="ROLE",
-        help="Limit to one or more case roles, e.g. failure (repeatable).",
+    _add_scope_flags(answer)
+
+    corroborate = subparsers.add_parser("corroborate")
+    corroborate.add_argument(
+        "case",
+        help="Video ID or subject substring of the case to corroborate.",
     )
-    query.add_argument(
-        "--case",
-        action="append",
-        metavar="ID_OR_SUBJECT",
-        help="Limit to a video ID or subject substring, e.g. pizza (repeatable).",
-    )
-    query.add_argument(
-        "--playlist-min",
-        type=int,
-        help="Limit to playlist positions at or after this index.",
-    )
-    query.add_argument(
-        "--playlist-max",
-        type=int,
-        help="Limit to playlist positions at or before this index.",
+    corroborate.add_argument("--model", default=LLM_MODEL)
+    corroborate.add_argument(
+        "--output",
+        default="reports/topics/business-failures-corroboration.md",
     )
 
     review_sample = subparsers.add_parser("review-sample")
@@ -229,19 +268,7 @@ def main():
         print(f"Portable exports ready: {path}")
         print(json.dumps(stats, indent=2))
     elif args.command == "query":
-        video_ids = None
-        if args.case:
-            video_ids = resolve_case_tokens(
-                load_topic_config(args.config),
-                args.case,
-            )
-        scope = build_scope_filter(
-            industries=args.industry,
-            case_roles=args.case_role,
-            video_ids=video_ids,
-            playlist_min=args.playlist_min,
-            playlist_max=args.playlist_max,
-        )
+        scope = _scope_from_args(args)
         hits = query_index(
             args.config,
             args.question,
@@ -251,6 +278,31 @@ def main():
         if not hits:
             print("No passages matched the question within the requested scope.")
         _print_hits(hits)
+    elif args.command == "answer":
+        scope = _scope_from_args(args)
+        result, evidence, invalid = synthesize_answer(
+            args.config,
+            args.question,
+            limit=args.results,
+            scope=scope,
+            model=args.model,
+        )
+        markdown = render_answer_md(args.question, result, evidence)
+        if args.output:
+            Path(args.output).parent.mkdir(parents=True, exist_ok=True)
+            Path(args.output).write_text(markdown, encoding="utf-8")
+            print(f"Answer ready: {args.output}")
+        else:
+            print(markdown)
+        if invalid:
+            print(f"\n[warning] {invalid} claim(s) failed citation validation.")
+    elif args.command == "corroborate":
+        video_ids = resolve_case_tokens(load_topic_config(args.config), [args.case])
+        path, summary = run_corroboration(
+            args.config, video_ids[0], args.output, model=args.model
+        )
+        print(f"Corroboration report ready: {path}")
+        print(json.dumps(summary, indent=2))
     elif args.command == "learn":
         path, stats = build_learning_layer(args.config)
         print(f"Learning layer ready: {path}")
