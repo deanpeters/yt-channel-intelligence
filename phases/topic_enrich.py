@@ -154,6 +154,25 @@ Input:
 """
 
 
+def _passages_needing_labels(
+    passages: list[dict],
+    relabel_all: bool,
+) -> list[dict]:
+    return [
+        passage
+        for passage in passages
+        if passage["include_in_index"]
+        and (
+            relabel_all
+            or passage["labels"]["review_status"] == "unlabeled"
+            # Backfill passages that carry labels but never got a summary
+            # (e.g. curated overrides added to passages the LLM never saw).
+            # The index embeds the summary, so a blank one weakens retrieval.
+            or not passage["labels"].get("summary")
+        )
+    ]
+
+
 def label_passages(
     passages: list[dict],
     taxonomy: dict,
@@ -163,15 +182,7 @@ def label_passages(
 ) -> None:
     import litellm
 
-    content_passages = [
-        passage
-        for passage in passages
-        if passage["include_in_index"]
-        and (
-            relabel_all
-            or passage["labels"]["review_status"] == "unlabeled"
-        )
-    ]
+    content_passages = _passages_needing_labels(passages, relabel_all)
     by_id = {passage["passage_id"]: passage for passage in passages}
     for offset in range(0, len(content_passages), batch_size):
         batch = content_passages[offset:offset + batch_size]
@@ -240,9 +251,87 @@ def _apply_overrides(passages: list[dict], overrides: dict) -> None:
             "evidence_types",
         ):
             additions = override.get(f"add_{field}", [])
-            labels[field] = list(dict.fromkeys(labels[field] + additions))
+            removals = set(override.get(f"remove_{field}", []))
+            merged = list(dict.fromkeys(labels[field] + additions))
+            labels[field] = [value for value in merged if value not in removals]
+        if "set_epistemic_status" in override:
+            labels["epistemic_status"] = override["set_epistemic_status"]
         labels["review_status"] = "curated_workup"
         labels["review_note"] = override.get("note", "")
+
+
+def _record_playlist_index(record: dict) -> int:
+    # Prefer the structured manifest field; fall back to the canonical
+    # transcript frontmatter so corpora built before playlist_index was
+    # recorded in the manifest still support playlist-range scoping.
+    if record.get("playlist_index"):
+        return int(record["playlist_index"])
+    try:
+        head = Path(record["canonical_transcript"]).read_text(
+            encoding="utf-8"
+        )[:800]
+    except OSError:
+        return 0
+    match = re.search(r"^playlist_index:\s*(\d+)", head, re.MULTILINE)
+    return int(match.group(1)) if match else 0
+
+
+def _subject_slug(subject: str) -> str:
+    slug = re.sub(r"[^A-Za-z0-9]+", "_", subject).strip("_").upper()
+    return slug or "SUBJECT"
+
+
+def _write_navigation_aids(config: dict, manifest: dict) -> str:
+    # Lets a folder of video-ID directories be scanned by subject/company.
+    workspace = Path(config["workspace"])
+    rows = []
+    for record in manifest["records"]:
+        video_id = record["video_id"]
+        case = config["cases"].get(video_id)
+        if not case:
+            continue
+        record_dir = Path(record["canonical_transcript"]).parent
+        marker_path = record_dir / f"{_subject_slug(case['subject'])}.md"
+        lines = [
+            f"# {case['subject']}",
+            "",
+            f"- Case role: {case['case_role']}",
+            f"- Subject type: {case['subject_type']}",
+            f"- Industry: {case['industry']}",
+            f"- Geography: {case['geography']}",
+            f"- Time period: {case['time_period']}",
+            f"- Video ID: {video_id}",
+            f"- YouTube: {record['youtube_url']}",
+            f"- Failure states: {', '.join(case.get('failure_states', []))}",
+            f"- Failure mechanisms: {', '.join(case.get('failure_mechanisms', []))}",
+            "",
+            "See `transcript.md` in this folder for the canonical transcript.",
+            "",
+        ]
+        marker_path.write_text("\n".join(lines), encoding="utf-8")
+        rows.append({
+            "subject": case["subject"],
+            "case_role": case["case_role"],
+            "industry": case["industry"],
+            "video_id": video_id,
+            "folder": str(record_dir.relative_to(workspace)),
+        })
+
+    rows.sort(key=lambda row: row["subject"].lower())
+    index_lines = [
+        f"# {config.get('topic', config['corpus_slug'])} — case index",
+        "",
+        "| Subject | Case role | Industry | Video ID | Folder |",
+        "|---|---|---|---|---|",
+    ]
+    index_lines += [
+        f"| {row['subject']} | {row['case_role']} | {row['industry']} "
+        f"| {row['video_id']} | {row['folder']}/ |"
+        for row in rows
+    ]
+    index_path = workspace / "INDEX.md"
+    index_path.write_text("\n".join(index_lines) + "\n", encoding="utf-8")
+    return str(index_path)
 
 
 def enrich_corpus(
@@ -301,12 +390,14 @@ def enrich_corpus(
             parse_srt(str(source_path)),
             case,
         )
+        playlist_index = _record_playlist_index(record)
         for passage in passages:
             if passage["passage_id"] in existing_labels:
                 passage["labels"] = existing_labels[passage["passage_id"]]
             passage["transcript_source"] = source_name
             passage["youtube_url"] = record["youtube_url"]
             passage["title"] = record["title"]
+            passage["playlist_index"] = playlist_index
             passage["taxonomy_version"] = config["taxonomy_version"]
         all_passages.extend(passages)
 
@@ -360,4 +451,5 @@ def enrich_corpus(
         json.dumps(manifest, indent=2, ensure_ascii=False) + "\n",
         encoding="utf-8",
     )
+    stats["index_path"] = _write_navigation_aids(config, manifest)
     return str(passages_path), stats

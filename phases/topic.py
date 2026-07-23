@@ -108,6 +108,7 @@ def build_corpus(
         records.append({
             "video_id": video["video_id"],
             "title": video["title"],
+            "playlist_index": video["playlist_index"] or 0,
             "canonical_transcript": canonical_path,
             "raw_transcript": raw_path,
             "subtitles": srt_path if os.path.exists(srt_path) else "",

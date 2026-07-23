@@ -7,8 +7,17 @@ import yaml
 
 from config import LLM_MODEL
 from phases.topic_export import export_corpus
-from phases.topic_enrich import enrich_corpus
-from phases.topic_retrieval import build_index, query_index
+from phases.topic_enrich import enrich_corpus, load_topic_config
+from phases.topic_retrieval import (
+    build_index,
+    build_scope_filter,
+    query_index,
+    resolve_case_tokens,
+)
+from phases.topic_review import (
+    apply_review_worksheet,
+    build_review_worksheet,
+)
 
 
 def _print_hits(hits: list[dict]) -> None:
@@ -131,6 +140,54 @@ def main():
     query = subparsers.add_parser("query")
     query.add_argument("question")
     query.add_argument("--results", type=int, default=6)
+    query.add_argument(
+        "--industry",
+        action="append",
+        metavar="NAME",
+        help="Limit to one or more industries (repeatable).",
+    )
+    query.add_argument(
+        "--case-role",
+        action="append",
+        metavar="ROLE",
+        help="Limit to one or more case roles, e.g. failure (repeatable).",
+    )
+    query.add_argument(
+        "--case",
+        action="append",
+        metavar="ID_OR_SUBJECT",
+        help="Limit to a video ID or subject substring, e.g. pizza (repeatable).",
+    )
+    query.add_argument(
+        "--playlist-min",
+        type=int,
+        help="Limit to playlist positions at or after this index.",
+    )
+    query.add_argument(
+        "--playlist-max",
+        type=int,
+        help="Limit to playlist positions at or before this index.",
+    )
+
+    review_sample = subparsers.add_parser("review-sample")
+    review_sample.add_argument("--per-stratum", type=int, default=2)
+    review_sample.add_argument(
+        "--stratify-by",
+        choices=["case", "mechanism", "epistemic"],
+        default="case",
+    )
+    review_sample.add_argument("--seed", type=int, default=0)
+    review_sample.add_argument(
+        "--output",
+        default="reports/topics/business-failures-label-review.csv",
+    )
+
+    review_apply = subparsers.add_parser("review-apply")
+    review_apply.add_argument("worksheet")
+    review_apply.add_argument(
+        "--output",
+        default="reports/topics/business-failures-review-overrides.yaml",
+    )
 
     evaluate = subparsers.add_parser("evaluate")
     evaluate.add_argument(
@@ -160,7 +217,49 @@ def main():
         print(f"Portable exports ready: {path}")
         print(json.dumps(stats, indent=2))
     elif args.command == "query":
-        _print_hits(query_index(args.config, args.question, limit=args.results))
+        video_ids = None
+        if args.case:
+            video_ids = resolve_case_tokens(
+                load_topic_config(args.config),
+                args.case,
+            )
+        scope = build_scope_filter(
+            industries=args.industry,
+            case_roles=args.case_role,
+            video_ids=video_ids,
+            playlist_min=args.playlist_min,
+            playlist_max=args.playlist_max,
+        )
+        hits = query_index(
+            args.config,
+            args.question,
+            limit=args.results,
+            scope=scope,
+        )
+        if not hits:
+            print("No passages matched the question within the requested scope.")
+        _print_hits(hits)
+    elif args.command == "review-sample":
+        path, count = build_review_worksheet(
+            args.config,
+            args.per_stratum,
+            args.stratify_by,
+            args.seed,
+            args.output,
+        )
+        print(f"Review worksheet ready: {path} ({count} passages)")
+        print(
+            "Fill the verdict/add_/remove_/set_epistemic_status/note columns, "
+            "then run: topic_corpus.py review-apply " + path
+        )
+    elif args.command == "review-apply":
+        path, summary = apply_review_worksheet(args.worksheet, args.output)
+        print(f"Overrides snippet ready: {path}")
+        print(json.dumps(summary, indent=2))
+        print(
+            "Review the snippet, then merge its entries into passage_overrides "
+            f"in {args.config} and re-run enrich + index."
+        )
     elif args.command == "evaluate":
         _evaluate(args.config, args.questions, args.output)
 

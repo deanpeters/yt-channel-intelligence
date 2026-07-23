@@ -202,7 +202,10 @@ python3 agent.py \
 This creates resumable audio, raw transcripts, timestamped subtitles, canonical Markdown transcripts, and a corpus manifest under `.workspace/topics/business-failures/`. Running the same command again skips completed downloads and transcriptions.
 
 Enrich the transcripts with the reviewed taxonomy, build the disposable local
-index, create portable study files, and try a question:
+index, create portable study files, and try a question. Enrichment also
+writes a `<SUBJECT>.md` marker next to each `transcript.md` (e.g.
+`PIZZA_HUT.md`) and a top-level `INDEX.md` in the workspace, so you can browse
+the video-ID folders by company instead of opening each one:
 
 ```bash
 bash setup-topic.sh
@@ -211,6 +214,41 @@ bash setup-topic.sh
 .venv-topic/bin/python topic_corpus.py export
 .venv-topic/bin/python topic_corpus.py query "How did short-term incentives undermine long-term health?"
 ```
+
+Scope a query to part of the corpus — by industry, case role, specific case
+(video ID or subject substring), or playlist range — to focus retrieval:
+
+```bash
+# Only restaurants, only the first fourteen playlist positions
+.venv-topic/bin/python topic_corpus.py query \
+  "How did cost structure and value perception drive decline?" \
+  --industry restaurants --playlist-max 14
+
+# Only the counterexamples
+.venv-topic/bin/python topic_corpus.py query \
+  "How did the company recover or adapt?" \
+  --case-role turnaround_counterexample --case-role resilience_counterexample
+
+# A single case by subject substring
+.venv-topic/bin/python topic_corpus.py query "Why did growth stall?" --case snapchat
+```
+
+Audit the machine-applied labels. Draw a reproducible stratified sample into a
+review worksheet, mark corrections in the `verdict` / `add_` / `remove_` /
+`set_epistemic_status` / `note` columns (in the notebook, a spreadsheet, or any
+CSV editor), then convert your markup into a `passage_overrides` snippet:
+
+```bash
+.venv-topic/bin/python topic_corpus.py review-sample --per-stratum 2 --stratify-by case
+# ...fill in the worksheet...
+.venv-topic/bin/python topic_corpus.py review-apply \
+  reports/topics/business-failures-label-review.csv
+```
+
+`review-apply` prints a review summary (reviewed / confirmed / corrected /
+error rate) to help decide whether the taxonomy needs a version bump. Paste the
+snippet's entries into `passage_overrides` in the topic config, then re-run
+`enrich` and `index`.
 
 Run the ten-question retrieval check:
 

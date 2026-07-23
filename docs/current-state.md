@@ -1,6 +1,8 @@
 # Current State and Restart Guide
 
-**Checkpoint:** Phase 0 complete; ready to begin Phase 1
+**Checkpoint:** Phase 0 complete. Phase 2 tooling in progress: retrieval
+scoping and the stratified label-review harness are implemented; the human
+label audit and taxonomy-bump decision are still pending.
 
 **Updated:** 2026-07-23
 
@@ -60,12 +62,24 @@ report contract. That is Phase 1.
 - Sponsor intervals and labels can be reviewed independently.
 - Same-version labels can be reused; taxonomy changes make records eligible for
   relabeling.
+- A stratified label-review harness (`review-sample` / `review-apply`) samples
+  passages into a worksheet and converts reviewer corrections into
+  `passage_overrides`. Overrides can now add labels, remove wrong labels, and
+  correct epistemic status. Machine labels remain unaudited until reviewed.
+- Enrichment also writes human-readable navigation aids into the workspace: a
+  `<SUBJECT>.md` marker file next to each video's `transcript.md`, and a
+  top-level `INDEX.md` listing every case by subject, case role, industry,
+  and video ID.
 
 ### Retrieval and evaluation
 
 - Chroma uses local sentence-transformer embeddings.
 - Retrieval combines semantic similarity with case, mechanism, causal-role,
   passage-label, and case-role signals.
+- Queries can be scoped to part of the corpus by industry, case role, specific
+  case (video ID or subject substring), and playlist range. Scope is applied as
+  a metadata filter before hybrid ranking; each passage carries its
+  `playlist_index` for range filtering.
 - Passage timestamps support direct YouTube links.
 - Sponsor material is excluded before indexing.
 - The original evaluation suite remains fixed instead of being tuned to the

@@ -139,6 +139,63 @@ def infer_query_intent(question: str) -> dict[str, list[str]]:
     }
 
 
+def resolve_case_tokens(config: dict, tokens: list[str]) -> list[str]:
+    """Map --case tokens to video IDs. A token may be a video ID or a
+    case-insensitive substring of a subject (e.g. "pizza" -> Pizza Hut)."""
+    cases = config.get("cases", {})
+    resolved = []
+    unmatched = []
+    for token in tokens:
+        if token in cases:
+            resolved.append(token)
+            continue
+        needle = token.lower()
+        matches = [
+            video_id
+            for video_id, case in cases.items()
+            if needle in case.get("subject", "").lower()
+        ]
+        if matches:
+            resolved.extend(matches)
+        else:
+            unmatched.append(token)
+    if unmatched:
+        raise ValueError(
+            "No case matched: " + ", ".join(unmatched)
+        )
+    return list(dict.fromkeys(resolved))
+
+
+def build_scope_filter(
+    *,
+    industries: list[str] | None = None,
+    case_roles: list[str] | None = None,
+    video_ids: list[str] | None = None,
+    playlist_min: int | None = None,
+    playlist_max: int | None = None,
+) -> dict | None:
+    """Build a ChromaDB `where` filter from retrieval-scope options.
+
+    Returns None when no scope is requested, a single clause when exactly one
+    dimension is set, and an `$and` of clauses otherwise."""
+    clauses = []
+    if industries:
+        clauses.append({"industry": {"$in": list(industries)}})
+    if case_roles:
+        clauses.append({"case_role": {"$in": list(case_roles)}})
+    if video_ids:
+        clauses.append({"video_id": {"$in": list(video_ids)}})
+    if playlist_min is not None:
+        clauses.append({"playlist_index": {"$gte": playlist_min}})
+    if playlist_max is not None:
+        clauses.append({"playlist_index": {"$lte": playlist_max}})
+    if not clauses:
+        return None
+    if len(clauses) == 1:
+        return clauses[0]
+    return {"$and": clauses}
+
+
 def _load_chromadb():
     try:
         import chromadb
@@ -160,6 +217,7 @@ def _metadata(passage: dict) -> dict:
         "case_role": case.get("case_role", "unspecified"),
         "subject_type": case["subject_type"],
         "industry": case["industry"],
+        "playlist_index": passage.get("playlist_index", 0),
         "start_seconds": passage["start_seconds"],
         "end_seconds": passage["end_seconds"],
         "youtube_url": passage["youtube_url"],
@@ -413,6 +471,7 @@ def query_index(
     question: str,
     limit: int = 6,
     candidate_count: int | None = None,
+    scope: dict | None = None,
 ) -> list[dict]:
     chromadb = _load_chromadb()
     config = load_topic_config(config_path)
@@ -450,8 +509,11 @@ def query_index(
             if candidate_count is None
             else min(candidate_count, collection.count())
         ),
+        where=scope,
         include=["documents", "metadatas", "embeddings", "distances"],
     )
+    if not result["ids"][0]:
+        return []
     documents = result["documents"][0]
     metadatas = result["metadatas"][0]
     embeddings = np.asarray(result["embeddings"][0], dtype=float)
