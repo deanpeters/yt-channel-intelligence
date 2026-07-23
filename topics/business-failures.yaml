@@ -517,6 +517,279 @@ cases:
       - {start: 42, end: 48, sponsor: David mention}
       - {start: 349, end: 405, sponsor: David}
 
+  # --- Batch 2 (playlist positions 21-35), drafted then reviewed ---
+  Jbsb-yb6js8:
+    subject: Grubhub
+    case_role: failure
+    subject_type: company
+    industry: restaurants
+    geography: United States
+    time_period: 2004-2024
+    failure_states:
+      - market_share_decline
+      - legal_issues
+      - revenue_decrease
+    failure_mechanisms:
+      - strategic_drift
+      - cost_structure_mismatch
+      - incentive_misalignment
+      - stakeholder_betrayal
+    sponsor_intervals:
+      - {start: 20, end: 22, sponsor: Morph}
+      - {start: 294, end: 357, sponsor: Morph}
+  4Z2cvEwZPz4:
+    subject: 7-Eleven
+    case_role: decline
+    subject_type: company
+    industry: retail
+    geography: Global
+    time_period: 1990-2026
+    failure_states:
+      - store_closures
+      - sales_decline
+    failure_mechanisms:
+      - strategic_drift
+      - incentive_misalignment
+      - market_or_demographic_shift
+      - ownership_or_portfolio_neglect
+    sponsor_intervals:
+      - {start: 42, end: 62, sponsor: Mr. Omitli}
+      - {start: 275, end: 321, sponsor: Remitley}
+  hC9YPMFNbSY:
+    subject: Aldi
+    case_role: resilience_counterexample
+    subject_type: company
+    industry: retail
+    geography: United States
+    time_period: 1976-2024
+    failure_states:
+      - sales_decline
+    failure_mechanisms: []
+    sponsor_intervals:
+      - {start: 18, end: 26, sponsor: Bedrock}
+      - {start: 163, end: 231, sponsor: Bedrock}
+  1y9ykk_00wI:
+    subject: SmileDirectClub
+    case_role: failure
+    subject_type: company
+    industry: healthcare
+    geography: United States
+    time_period: 2012-2023
+    failure_states:
+      - bankruptcy
+      - customer_exodus
+      - sales_decline
+    failure_mechanisms:
+      - financial_leverage
+      - strategic_drift
+      - quality_or_value_erosion
+      - governance_failure
+    sponsor_intervals:
+      - {start: 43, end: 64, sponsor: ZERO}
+      - {start: 376, end: 424, sponsor: Xero}
+  ClKtL3Vq-WY:
+    subject: LIV Golf
+    case_role: failure
+    subject_type: company
+    industry: sports
+    geography: Global
+    time_period: 2021-2026
+    failure_states:
+      - financial_loss
+      - poor_public_perception
+      - market_rejection
+    failure_mechanisms:
+      - stakeholder_betrayal
+      - identity_or_reputation_coupling
+      - financial_leverage
+    sponsor_intervals:
+      - {start: 24, end: 34, sponsor: Fora}
+      - {start: 588, end: 632, sponsor: Fora}
+  XfMFprB-rmk:
+    subject: Spirit Airlines
+    case_role: failure
+    subject_type: company
+    industry: airlines
+    geography: United States
+    time_period: 1983-2026
+    failure_states:
+      - bankruptcy
+      - job_loss
+      - sales_decline
+    failure_mechanisms:
+      - strategic_drift
+      - cost_structure_mismatch
+      - market_or_demographic_shift
+      - ownership_or_portfolio_neglect
+    sponsor_intervals:
+      - {start: 21, end: 45, sponsor: Zapier}
+      - {start: 446, end: 490, sponsor: Zapier}
+  gEs7LhTmqhA:
+    subject: Barstool Sports
+    case_role: failure
+    subject_type: company
+    industry: media
+    geography: United States
+    time_period: 2003-2023
+    failure_states:
+      - financial_loss
+      - brand_reputation_damage
+      - poor_acquisition_decision
+    failure_mechanisms:
+      - ownership_or_portfolio_neglect
+      - incentive_misalignment
+      - identity_or_reputation_coupling
+    sponsor_intervals:
+      - {start: 41, end: 61, sponsor: Bolt.new}
+      - {start: 328, end: 369, sponsor: Bolt.new}
+  AjAtW5eh8YI:
+    subject: Apple's Siri
+    case_role: decline
+    subject_type: product_brand
+    industry: technology
+    geography: Global
+    time_period: 2011-2026
+    failure_states:
+      - quality_or_value_erosion
+      - ownership_or_portfolio_neglect
+      - strategic_drift
+    failure_mechanisms:
+      - incentive_misalignment
+      - mission_loss
+      - governance_failure
+    sponsor_intervals:
+      - {start: 494, end: 517, sponsor: WhisperFlow}
+  fXeFoQvT3qY:
+    subject: WeWork
+    case_role: failure
+    subject_type: company
+    industry: real_estate
+    geography: United States
+    time_period: 2010-2023
+    failure_states:
+      - bankruptcy
+      - losses
+      - governance_failure
+    failure_mechanisms:
+      - overexpansion_or_overcapacity
+      - governance_failure
+      - financial_leverage
+      - failed_transformation
+    sponsor_intervals:
+      - {start: 48, end: 69, sponsor: Zockdog}
+      - {start: 638, end: 702, sponsor: ZocDoc}
+  XyW5ylPk-Bc:
+    subject: Target
+    case_role: failure
+    subject_type: company
+    industry: retail
+    geography: United States
+    time_period: 1962-2023
+    failure_states:
+      - sales_decline
+      - brand_reputation_loss
+      - overexpansion_or_overcapacity
+    failure_mechanisms:
+      - strategic_drift
+      - unclear_positioning
+      - capability_erosion
+      - normalization_of_deviance
+    sponsor_intervals: []
+  oK9TVOo-gOA:
+    subject: Kellogg's
+    case_role: decline
+    subject_type: company
+    industry: cereal
+    geography: United States
+    time_period: 1990-2026
+    failure_states:
+      - sales_decline
+      - brand_loyalty_loss
+      - market_share_loss
+    failure_mechanisms:
+      - market_or_demographic_shift
+      - short_term_optimization
+      - stakeholder_betrayal
+      - quality_or_value_erosion
+    sponsor_intervals:
+      - {start: 81, end: 101, sponsor: Monarch Money}
+      - {start: 532, end: 614, sponsor: Monarch Money}
+  hN5SxaV6waM:
+    subject: Disney World
+    case_role: decline
+    subject_type: company
+    industry: entertainment
+    geography: United States
+    time_period: 1965-2026
+    failure_states:
+      - attendance_decline
+      - customer_betrayal
+      - quality_or_value_erosion
+    failure_mechanisms:
+      - short_term_optimization
+      - stakeholder_betrayal
+      - mission_loss
+      - financial_leverage
+    sponsor_intervals:
+      - {start: 66, end: 86, sponsor: Wealthfront}
+      - {start: 301, end: 324, sponsor: Wealthfront}
+  SrsUlTtLLIM:
+    subject: Nike
+    case_role: decline
+    subject_type: company
+    industry: retail
+    geography: Global
+    time_period: 1964-2024
+    failure_states:
+      - market_share_decline
+      - brand_reputation_loss
+      - sales_decline
+    failure_mechanisms:
+      - strategic_drift
+      - stakeholder_betrayal
+      - channel_or_platform_dependency
+      - mission_loss
+    sponsor_intervals:
+      - {start: 65, end: 87, sponsor: girdly.com/youtube}
+  qcCwujO_qYc:
+    subject: Groupon
+    case_role: failure
+    subject_type: company
+    industry: technology
+    geography: United States
+    time_period: 2008-2023
+    failure_states:
+      - sales_decline
+      - financial_loss
+      - market_irrelevance
+    failure_mechanisms:
+      - incentive_misalignment
+      - strategic_drift
+      - governance_failure
+      - quality_or_value_erosion
+    sponsor_intervals:
+      - {start: 43, end: 63, sponsor: Fora}
+      - {start: 341, end: 385, sponsor: Fora}
+  j-hk5arBWRg:
+    subject: 23andMe
+    case_role: failure
+    subject_type: company
+    industry: technology
+    geography: Global
+    time_period: 2006-2025
+    failure_states:
+      - bankruptcy
+      - data_breach
+      - sales_decline
+    failure_mechanisms:
+      - strategic_drift
+      - governance_failure
+      - financial_leverage
+      - quality_or_value_erosion
+    sponsor_intervals:
+      - {start: 84, end: 84, sponsor: Masterclass Executive}
+      - {start: 507, end: 570, sponsor: Masterclass Executive}
+
 passage_overrides:
   CU3xYnICJ0s-000167-000230:
     add_failure_mechanisms: [short_term_optimization]

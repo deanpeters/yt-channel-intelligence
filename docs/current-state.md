@@ -15,8 +15,12 @@ evaluation (all gating checks passing) are implemented. Phase 4 complete:
 source-backed answer synthesis (`answer`) writes cited, inference-labeled
 answers over scoped retrieval; a corroboration pilot (`corroborate`)
 cross-checks one case (FTX) against an independent public-record second source
-and enforces the naming gate — with 1/20 cases corroborated, the corpus is
-explicitly not yet domain intelligence.
+and enforces the naming gate. Phase 5 first batch complete: playlist positions
+21-35 were captured, drafted into case configs with `draft-cases`, reviewed,
+and integrated. The corpus is now 35 cases and 584 indexed passages (83 sponsor
+passages excluded). Retrieval evals held stable across the near-doubling (fixed
+regression 5/10, calibration 8/10), and corpus growth reduced provisional
+single-case mechanisms from four to one (only `adverse_selection` remains).
 
 **Updated:** 2026-07-23
 

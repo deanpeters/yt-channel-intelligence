@@ -23,6 +23,7 @@ from phases.topic_teaching import build_teaching_layer
 from phases.topic_pedagogy import evaluate_pedagogy
 from phases.topic_synthesis import render_answer_md, synthesize_answer
 from phases.topic_corroboration import run_corroboration
+from phases.topic_intake import draft_cases
 
 
 def _scope_from_args(args):
@@ -155,6 +156,10 @@ def main():
     subparsers.add_parser("index")
     subparsers.add_parser("export")
     subparsers.add_parser("learn")
+
+    draft = subparsers.add_parser("draft-cases")
+    draft.add_argument("--model", default=LLM_MODEL)
+
     teach = subparsers.add_parser("teach")
     teach.add_argument("--model", default=LLM_MODEL)
 
@@ -307,6 +312,11 @@ def main():
         path, stats = build_learning_layer(args.config)
         print(f"Learning layer ready: {path}")
         print(json.dumps(stats, indent=2))
+    elif args.command == "draft-cases":
+        path, stats = draft_cases(args.config, model=args.model)
+        print(f"Draft cases ready: {path}")
+        print(json.dumps(stats, indent=2))
+        print("Review and paste the entries into the config's cases: block.")
     elif args.command == "teach":
         path, stats = build_teaching_layer(args.config, model=args.model)
         print(f"Teaching notes ready: {path}")

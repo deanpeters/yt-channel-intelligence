@@ -201,6 +201,20 @@ python3 agent.py \
 
 This creates resumable audio, raw transcripts, timestamped subtitles, canonical Markdown transcripts, and a corpus manifest under `.workspace/topics/business-failures/`. Running the same command again skips completed downloads and transcriptions.
 
+When you capture a new batch (for example raising `--limit` to pull the next
+playlist positions), each new video needs a reviewed `cases:` entry before it
+can be enriched. Draft those entries from the fresh transcripts, then review
+and paste them into the topic config:
+
+```bash
+.venv-topic/bin/python topic_corpus.py draft-cases
+```
+
+`draft-cases` proposes a subject, case role, failure mechanisms, and sponsor
+intervals for every captured video that has no case yet, writing a YAML snippet
+to `reports/topics/`. It is a draft to correct, not an automatic commit into the
+taxonomy — always check the case roles and sponsor timestamps before pasting.
+
 Enrich the transcripts with the reviewed taxonomy, build the disposable local
 index, create portable study files, and try a question. Enrichment also
 writes a `<SUBJECT>.md` marker next to each `transcript.md` (e.g.
