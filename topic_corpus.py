@@ -23,6 +23,7 @@ from phases.topic_teaching import build_teaching_layer
 from phases.topic_pedagogy import evaluate_pedagogy
 from phases.topic_synthesis import render_answer_md, synthesize_answer
 from phases.topic_corroboration import run_corroboration
+from phases.topic_domain import domain_status
 from phases.topic_intake import draft_cases
 from phases.topic_package import build_archive
 
@@ -218,6 +219,12 @@ def main():
     )
     _add_scope_flags(answer)
 
+    domain = subparsers.add_parser("domain-status")
+    domain.add_argument(
+        "--output",
+        default="reports/topics/business-failures-domain-status.md",
+    )
+
     corroborate = subparsers.add_parser("corroborate")
     corroborate.add_argument(
         "case",
@@ -309,6 +316,10 @@ def main():
             print(markdown)
         if invalid:
             print(f"\n[warning] {invalid} claim(s) failed citation validation.")
+    elif args.command == "domain-status":
+        path, assessment = domain_status(args.config, args.output)
+        print(f"Domain status ready: {path}")
+        print(json.dumps(assessment, indent=2))
     elif args.command == "corroborate":
         video_ids = resolve_case_tokens(load_topic_config(args.config), [args.case])
         path, summary = run_corroboration(

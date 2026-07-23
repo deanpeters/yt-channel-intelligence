@@ -1,0 +1,25 @@
+# Independent corroboration reference for the 23andMe case.
+# Public record (news reporting, FTC statements), independent of the YouTube
+# source the corpus was built from.
+case: j-hk5arBWRg
+subject: 23andMe
+source: Independent public record (CNN, Forbes, HIPAA Journal reporting)
+facts:
+  - fact: >-
+      23andMe filed for Chapter 11 bankruptcy in March 2025 and announced it
+      would sell substantially all of its assets; CEO and co-founder Anne
+      Wojcicki resigned effective immediately.
+    citation: https://www.forbes.com/sites/siladityaray/2025/03/24/23andme-files-for-chapter-11-bankruptcy-ceo-anne-wojcicki-exits/
+  - fact: >-
+      A 2023 data breach exposed close to 7 million customer profiles, drove
+      the stock down, and led to a $30 million class-action settlement.
+    citation: https://www.hipaajournal.com/genetic-testing-company-23andme-files-for-bankruptcy/
+  - fact: >-
+      Anne Wojcicki's attempts to take the company private (including a bid with
+      New Mountain Capital) were rejected or collapsed before the filing.
+    citation: https://www.cnn.com/2025/03/24/tech/23andme-bankruptcy-hnk-intl
+  - fact: >-
+      In the bankruptcy auction Regeneron Pharmaceuticals agreed to buy 23andMe
+      for about $256 million, a repayment nuance not emphasized in the corpus
+      source.
+    citation: https://www.hipaajournal.com/genetic-testing-company-23andme-files-for-bankruptcy/

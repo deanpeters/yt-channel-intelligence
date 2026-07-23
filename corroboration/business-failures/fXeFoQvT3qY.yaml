@@ -1,0 +1,25 @@
+# Independent corroboration reference for the WeWork case.
+# Public record (news reporting, court filings), independent of the YouTube
+# source the corpus was built from.
+case: fXeFoQvT3qY
+subject: WeWork
+source: Independent public record (Forbes, CNBC, bankruptcy filings)
+facts:
+  - fact: >-
+      WeWork filed for Chapter 11 bankruptcy on November 6, 2023, after peaking
+      at a $47 billion valuation in a 2019 round led by SoftBank.
+    citation: https://www.cnbc.com/2023/11/07/wework-files-for-bankruptcy.html
+  - fact: >-
+      At filing WeWork reported roughly $15 billion in assets against about
+      $18.6 billion in debt, plus close to $100 million in unpaid rent and
+      lease-termination fees.
+    citation: https://www.forbes.com/sites/britneynguyen/2023/11/07/weworks-rise-to-47-billion-and-fall-to-bankruptcy-a-timeline/
+  - fact: >-
+      WeWork's 2019 IPO was cancelled after its prospectus exposed heavy
+      spending and corporate-governance concerns, leading to Adam Neumann's
+      departure in September 2019.
+    citation: https://2727coworking.com/articles/wework-history-ipo-bankruptcy
+  - fact: >-
+      SoftBank poured over $16 billion into WeWork and ended up owning more than
+      65% of the company.
+    citation: https://www.cnbc.com/2023/11/07/wework-files-for-bankruptcy.html

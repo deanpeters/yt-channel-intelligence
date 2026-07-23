@@ -1,0 +1,20 @@
+# Independent corroboration reference for the Silicon Valley Bank case.
+# Public record (regulatory statements, news reporting), independent of the
+# YouTube source the corpus was built from.
+case: mKWQxPX0Uso
+subject: Silicon Valley Bank
+source: Independent public record (FDIC, CNBC, NPR reporting)
+facts:
+  - fact: >-
+      Silicon Valley Bank was shut down by regulators on March 10, 2023, the
+      second-largest bank failure in U.S. history at the time.
+    citation: https://www.cnbc.com/2023/03/10/silicon-valley-bank-is-shut-down-by-regulators-fdic-to-protect-insured-deposits.html
+  - fact: >-
+      The collapse was a classic bank run: SVB went from functioning to
+      insolvent in about two days after announcing a $1.8 billion loss on asset
+      sales and a plan to raise over $2 billion in capital.
+    citation: https://www.npr.org/2023/03/10/1162599556/silicon-valley-bank-collapse-failure-fdic-regulators-run-on-bank
+  - fact: >-
+      The FDIC took control, and First-Citizens Bank & Trust assumed SVB's
+      deposits and loans, reopening its branches on March 27, 2023.
+    citation: https://www.fdic.gov/news/speeches/2023/spmar2723.html

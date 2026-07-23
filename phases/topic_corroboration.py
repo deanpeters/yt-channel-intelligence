@@ -189,4 +189,24 @@ def run_corroboration(
     summary = summarize(result)
     summary["invalid_statuses"] = invalid
     summary["naming_gate"] = gate
+
+    # Persist a per-case result so domain-status can aggregate across the
+    # corpus (rebuildable local state, not committed).
+    results_dir = Path(config["workspace"]) / "corroboration"
+    results_dir.mkdir(parents=True, exist_ok=True)
+    (results_dir / f"{video_id}.json").write_text(
+        json.dumps(
+            {
+                "video_id": video_id,
+                "subject": reference["subject"],
+                "source": reference.get("source", ""),
+                "summary": summarize(result),
+                "claim_checks": result.get("claim_checks", []),
+                "omissions": result.get("omissions", []),
+            },
+            indent=2,
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
     return output_path, summary

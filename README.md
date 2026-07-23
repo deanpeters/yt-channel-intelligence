@@ -361,6 +361,17 @@ corpus, not domain intelligence:
 .venv-topic/bin/python topic_corpus.py corroborate FTX
 ```
 
+See the corpus-wide corroboration picture (Phase 7). This aggregates every
+case's corroboration result into one trust verdict: how much of the corpus is
+checked against an independent source, how the claims held up, and any
+contradictions where a source disagrees with the corpus. The "domain
+intelligence" label is gated on this data — until coverage is broad and
+contradictions are resolved, the corpus stays a single-channel topical corpus:
+
+```bash
+.venv-topic/bin/python topic_corpus.py domain-status
+```
+
 Package a portable, data-only study archive — manifest, canonical transcripts,
 taxonomy, enrichment, exports, learning artifacts, evaluations, and the
 notebook, zipped together. Audio and the rebuildable search index are excluded,

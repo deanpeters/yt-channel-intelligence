@@ -24,7 +24,13 @@ and only one single-case mechanism (`adverse_selection`) remains provisional.
 Phase 6 complete: `package` builds a portable, data-only archive (manifest,
 canonical transcripts, taxonomy, enrichment, exports, learning artifacts,
 evaluations, notebook) that excludes audio and the Chroma index and needs no
-API key to open.
+API key to open. Phase 7 started: corroboration now persists per-case results,
+and `domain-status` aggregates them corpus-wide — coverage, claim outcomes, and
+contradictions — with a data-driven naming gate. Four cases (FTX, WeWork,
+Silicon Valley Bank, 23andMe) are corroborated against independent public-record
+sources; at 4/50 coverage with open contradictions the gate correctly reports
+the corpus is not yet domain intelligence. Full cross-channel domain
+intelligence still requires ingesting a second source channel.
 
 **Updated:** 2026-07-23
 
