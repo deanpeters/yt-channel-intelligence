@@ -24,6 +24,7 @@ from phases.topic_pedagogy import evaluate_pedagogy
 from phases.topic_synthesis import render_answer_md, synthesize_answer
 from phases.topic_corroboration import run_corroboration
 from phases.topic_intake import draft_cases
+from phases.topic_package import build_archive
 
 
 def _scope_from_args(args):
@@ -157,6 +158,9 @@ def main():
     subparsers.add_parser("export")
     subparsers.add_parser("learn")
 
+    package = subparsers.add_parser("package")
+    package.add_argument("--output-dir", default="dist")
+
     draft = subparsers.add_parser("draft-cases")
     draft.add_argument("--model", default=LLM_MODEL)
 
@@ -271,6 +275,10 @@ def main():
     elif args.command == "export":
         path, stats = export_corpus(args.config)
         print(f"Portable exports ready: {path}")
+        print(json.dumps(stats, indent=2))
+    elif args.command == "package":
+        path, stats = build_archive(args.config, output_dir=args.output_dir)
+        print(f"Portable archive ready: {path}")
         print(json.dumps(stats, indent=2))
     elif args.command == "query":
         scope = _scope_from_args(args)

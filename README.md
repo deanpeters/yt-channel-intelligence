@@ -361,6 +361,17 @@ corpus, not domain intelligence:
 .venv-topic/bin/python topic_corpus.py corroborate FTX
 ```
 
+Package a portable, data-only study archive — manifest, canonical transcripts,
+taxonomy, enrichment, exports, learning artifacts, evaluations, and the
+notebook, zipped together. Audio and the rebuildable search index are excluded,
+and nothing inside needs an API key (it is meant for pandas, Polars, DuckDB,
+Jupyter, Colab, or Antigravity):
+
+```bash
+.venv-topic/bin/python topic_corpus.py package
+# -> dist/business-failures-0-3-workup.zip
+```
+
 The export command creates CSV, JSONL, and Parquet study files. Open
 [`notebooks/business-failures-exploration.ipynb`](notebooks/business-failures-exploration.ipynb)
 locally, in Google Colab, or in Google Antigravity to inspect cases, labels,

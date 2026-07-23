@@ -21,6 +21,10 @@ and integrated. The corpus is now 35 cases and 584 indexed passages (83 sponsor
 passages excluded). Retrieval evals held stable across the near-doubling (fixed
 regression 5/10, calibration 8/10), and corpus growth reduced provisional
 single-case mechanisms from four to one (only `adverse_selection` remains).
+Phase 6 complete: `package` builds a portable, data-only archive (manifest,
+canonical transcripts, taxonomy, enrichment, exports, learning artifacts,
+evaluations, notebook) that excludes audio and the Chroma index and needs no
+API key to open.
 
 **Updated:** 2026-07-23
 
