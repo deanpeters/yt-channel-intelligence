@@ -2,10 +2,10 @@
 
 **Checkpoint:** Phase 0 complete. Phase 2 tooling committed: retrieval
 scoping and the stratified label-review harness are implemented (the human
-label audit and taxonomy-bump decision are still pending). Phase 3 in
-progress: the deterministic learning layer (case cards, causal chains,
-pattern matrix) and the LLM teaching-notes prose layer (citation-validated
-against the cards) are implemented; pedagogic evaluations are still pending.
+label audit and taxonomy-bump decision are still pending). Phase 3 complete:
+the deterministic learning layer (case cards, causal chains, pattern matrix),
+the citation-validated LLM teaching-notes prose layer, and the pedagogic
+evaluation (all gating checks passing) are implemented.
 
 **Updated:** 2026-07-23
 

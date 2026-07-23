@@ -292,6 +292,15 @@ This writes per-case teaching notes (Markdown + JSON) under
 `.workspace/topics/business-failures/learning/teaching-notes/` and reports how
 many lessons, if any, failed citation validation.
 
+Run the pedagogic evaluation — mechanical checks over the learning layer
+(citation integrity, counterexample coverage, boundary conditions, evidence-gap
+disclosure, and within-corpus pattern recurrence with single-case mechanisms
+flagged provisional):
+
+```bash
+.venv-topic/bin/python topic_corpus.py evaluate-learning
+```
+
 The export command creates CSV, JSONL, and Parquet study files. Open
 [`notebooks/business-failures-exploration.ipynb`](notebooks/business-failures-exploration.ipynb)
 locally, in Google Colab, or in Google Antigravity to inspect cases, labels,

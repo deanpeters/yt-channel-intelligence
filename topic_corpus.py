@@ -20,6 +20,7 @@ from phases.topic_review import (
 )
 from phases.topic_learning import build_learning_layer
 from phases.topic_teaching import build_teaching_layer
+from phases.topic_pedagogy import evaluate_pedagogy
 
 
 def _print_hits(hits: list[dict]) -> None:
@@ -142,6 +143,12 @@ def main():
     teach = subparsers.add_parser("teach")
     teach.add_argument("--model", default=LLM_MODEL)
 
+    evaluate_learning = subparsers.add_parser("evaluate-learning")
+    evaluate_learning.add_argument(
+        "--output",
+        default="reports/topics/business-failures-pedagogy-evaluation.md",
+    )
+
     query = subparsers.add_parser("query")
     query.add_argument("question")
     query.add_argument("--results", type=int, default=6)
@@ -252,6 +259,10 @@ def main():
         path, stats = build_teaching_layer(args.config, model=args.model)
         print(f"Teaching notes ready: {path}")
         print(json.dumps(stats, indent=2))
+    elif args.command == "evaluate-learning":
+        path, summary = evaluate_pedagogy(args.config, args.output)
+        print(f"Pedagogic evaluation ready: {path}")
+        print(json.dumps(summary, indent=2))
     elif args.command == "review-sample":
         path, count = build_review_worksheet(
             args.config,
