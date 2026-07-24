@@ -1056,6 +1056,276 @@ cases:
       - {start: 82, end: 110, sponsor: sponsor}
       - {start: 326, end: 370, sponsor: sponsor}
 
+  # --- Batch 4 (playlist positions 51-65), drafted then reviewed ---
+  CJ7SWBB43cs:
+    subject: Small Cars
+    case_role: decline
+    subject_type: product_brand
+    industry: automotive
+    geography: United States
+    time_period: 1980-2026
+    failure_states:
+      - sales_decline
+      - market_share_loss
+      - design_neglect
+    failure_mechanisms:
+      - market_or_demographic_shift
+      - incentive_misalignment
+      - strategic_drift
+    sponsor_intervals:
+      - {start: 0, end: 20, sponsor: Nier}
+      - {start: 212, end: 254, sponsor: Nier}
+  GOBigBjHwe8:
+    subject: Target Canada
+    case_role: failure
+    subject_type: company
+    industry: retail
+    geography: Canada
+    time_period: 2011-2015
+    failure_states:
+      - bankruptcy
+      - sales_decline
+      - inventory_mismanagement
+    failure_mechanisms:
+      - overexpansion_or_overcapacity
+      - feedback_suppression
+      - normalization_of_deviance
+    sponsor_intervals: []
+  QKg89xaS-GU:
+    subject: TED
+    case_role: decline
+    subject_type: product_brand
+    industry: technology
+    geography: Global
+    time_period: 1984-2026
+    failure_states:
+      - brand_irrelevance
+      - quality_or_value_erosion
+      - identity_or_reputation_coupling
+    failure_mechanisms:
+      - strategic_drift
+      - mission_loss
+      - overexpansion_or_overcapacity
+    sponsor_intervals:
+      - {start: 333, end: 334, sponsor: girdly.com/youtube}
+  po0o7HeDgtU:
+    subject: JCPenney
+    case_role: failure
+    subject_type: company
+    industry: retail
+    geography: United States
+    time_period: 1902-2020
+    failure_states:
+      - bankruptcy
+      - sales_decline
+      - executive_turnover
+    failure_mechanisms:
+      - failed_transformation
+      - strategic_drift
+      - market_or_demographic_shift
+      - incentive_misalignment
+    sponsor_intervals:
+      - {start: 28, end: 34, sponsor: Quo mention}
+      - {start: 253, end: 329, sponsor: Quo}
+  2AxCm3MoPLs:
+    subject: Gap Inc.
+    case_role: failure
+    subject_type: company
+    industry: retail
+    geography: United States
+    time_period: 2020-2023
+    failure_states:
+      - sales_decline
+      - inventory_write_off
+      - executive_turnover
+    failure_mechanisms:
+      - strategic_drift
+      - governance_failure
+      - incentive_misalignment
+    sponsor_intervals:
+      - {start: 21, end: 43, sponsor: Monarch Money}
+      - {start: 347, end: 408, sponsor: Monarch Money}
+  325ePL8uyHw:
+    subject: SEGA
+    case_role: resilience_counterexample
+    subject_type: company
+    industry: technology
+    geography: Global
+    time_period: 1990-2026
+    failure_states:
+      - sales_decline
+      - market_share_loss
+      - operational_failure
+    failure_mechanisms: []
+    sponsor_intervals:
+      - {start: 66, end: 87, sponsor: Scribe}
+      - {start: 623, end: 646, sponsor: Scribe}
+  tVhSexSF6ds:
+    subject: Kraft Mac and Cheese
+    case_role: decline
+    subject_type: product_brand
+    industry: food
+    geography: United States
+    time_period: 1937-2025
+    failure_states:
+      - sales_decline
+      - market_share_loss
+      - brand_damage
+    failure_mechanisms:
+      - cost_structure_mismatch
+      - market_or_demographic_shift
+      - strategic_drift
+      - quality_or_value_erosion
+    sponsor_intervals:
+      - {start: 65, end: 87, sponsor: Zapier}
+      - {start: 269, end: 311, sponsor: Zapier}
+  DinLx3qBbAU:
+    subject: AOL
+    case_role: failure
+    subject_type: company
+    industry: technology
+    geography: United States
+    time_period: 1983-2021
+    failure_states:
+      - sales_decline
+      - market_or_demographic_shift
+      - failed_transformation
+    failure_mechanisms:
+      - strategic_drift
+      - market_or_demographic_shift
+      - failed_transformation
+    sponsor_intervals:
+      - {start: 23, end: 42, sponsor: Babbel}
+      - {start: 379, end: 422, sponsor: Babbel}
+  PPzQYmsKw9o:
+    subject: Teen Jobs
+    case_role: decline
+    subject_type: market_ecosystem
+    industry: employment
+    geography: United States
+    time_period: 1975-2026
+    failure_states:
+      - employment_decline
+      - decreased_opportunities
+      - demographic_shifts
+    failure_mechanisms:
+      - market_or_demographic_shift
+      - capability_erosion
+      - incentive_misalignment
+    sponsor_intervals: []
+  RrFkb4IcV_M:
+    subject: Starbucks
+    case_role: decline
+    subject_type: company
+    industry: restaurants
+    geography: Global
+    time_period: 1971-2026
+    failure_states:
+      - sales_decline
+      - identity_crisis
+      - overexpansion_or_overcapacity
+    failure_mechanisms:
+      - failed_transformation
+      - mission_loss
+      - unclear_positioning
+      - strategic_drift
+    sponsor_intervals:
+      - {start: 46, end: 71, sponsor: Monarch Money}
+      - {start: 498, end: 504, sponsor: Monarch Money}
+  i6064FLCnWQ:
+    subject: MTV
+    case_role: decline
+    subject_type: company
+    industry: media
+    geography: United States
+    time_period: 1981-2026
+    failure_states:
+      - viewership_decline
+      - brand_irrelevance
+      - loss_of_mission
+    failure_mechanisms:
+      - strategic_drift
+      - market_or_demographic_shift
+      - mission_loss
+    sponsor_intervals:
+      - {start: 20, end: 40, sponsor: Mint Mobile}
+      - {start: 392, end: 438, sponsor: Mint Mobile}
+  TIFwM01GX98:
+    subject: MoviePass
+    case_role: failure
+    subject_type: company
+    industry: technology
+    geography: United States
+    time_period: 2006-2019
+    failure_states:
+      - bankruptcy
+      - sales_decline
+      - fraud
+    failure_mechanisms:
+      - cost_structure_mismatch
+      - incentive_misalignment
+      - governance_failure
+      - fraud_or_asset_misappropriation
+    sponsor_intervals:
+      - {start: 0, end: 22, sponsor: Relay}
+      - {start: 325, end: 416, sponsor: Relay}
+  vzV2lBeYNrw:
+    subject: Bird Scooters
+    case_role: failure
+    subject_type: company
+    industry: micro_mobility
+    geography: United States
+    time_period: 2017-2023
+    failure_states:
+      - bankruptcy
+      - financial_loss
+      - market_exit
+    failure_mechanisms:
+      - cost_structure_mismatch
+      - overexpansion_or_overcapacity
+      - short_term_optimization
+    sponsor_intervals:
+      - {start: 22, end: 27, sponsor: Monarch Money}
+      - {start: 334, end: 401, sponsor: Monarch Money}
+  RsMGu292H0g:
+    subject: MySpace
+    case_role: failure
+    subject_type: company
+    industry: technology
+    geography: United States
+    time_period: 2003-2023
+    failure_states:
+      - sales_decline
+      - user_loss
+      - operational_failure
+    failure_mechanisms:
+      - strategic_drift
+      - short_term_optimization
+      - ownership_or_portfolio_neglect
+      - feedback_suppression
+    sponsor_intervals:
+      - {start: 0, end: 22, sponsor: Relay}
+      - {start: 449, end: 513, sponsor: Relay}
+  nIaMNChY2eU:
+    subject: Blackberry
+    case_role: failure
+    subject_type: company
+    industry: technology
+    geography: Global
+    time_period: 1984-2016
+    failure_states:
+      - sales_decline
+      - market_share_loss
+      - product_failure
+    failure_mechanisms:
+      - strategic_drift
+      - governance_failure
+      - capability_erosion
+      - success_induced_obsolescence
+    sponsor_intervals:
+      - {start: 67, end: 89, sponsor: Quo}
+      - {start: 268, end: 310, sponsor: Quo}
+
 passage_overrides:
   CU3xYnICJ0s-000167-000230:
     add_failure_mechanisms: [short_term_optimization]

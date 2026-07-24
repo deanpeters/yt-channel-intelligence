@@ -16,10 +16,10 @@ source-backed answer synthesis (`answer`) writes cited, inference-labeled
 answers over scoped retrieval; a corroboration pilot (`corroborate`)
 cross-checks one case (FTX) against an independent public-record second source
 and enforces the naming gate. Phase 5 batches complete: playlist positions
-21-50 were captured across two reviewed batches, drafted into case configs with
-`draft-cases`, reviewed, and integrated. The corpus is now 50 cases and 813
-indexed passages (106 sponsor passages excluded). Retrieval evals held stable
-across the tripling of the corpus (fixed regression 5/10, calibration 8/10),
+21-65 were captured across reviewed batches, drafted into case configs with
+`draft-cases`, reviewed, and integrated. The corpus is now 65 cases and 1025
+indexed passages (134 sponsor passages excluded). Retrieval evals held stable
+across the growth of the corpus (fixed regression 5/10, calibration 8/10),
 and only one single-case mechanism (`adverse_selection`) remains provisional.
 Phase 6 complete: `package` builds a portable, data-only archive (manifest,
 canonical transcripts, taxonomy, enrichment, exports, learning artifacts,
@@ -28,11 +28,11 @@ API key to open. Phase 7 started: corroboration now persists per-case results,
 and `domain-status` aggregates them corpus-wide — coverage, claim outcomes, and
 contradictions — with a data-driven naming gate. Four cases (FTX, WeWork,
 Silicon Valley Bank, 23andMe) are corroborated against independent public-record
-sources; at 4/50 coverage with open contradictions the gate correctly reports
+sources; at 4/65 coverage with open contradictions the gate correctly reports
 the corpus is not yet domain intelligence. Full cross-channel domain
 intelligence still requires ingesting a second source channel.
 
-**Updated:** 2026-07-23
+**Updated:** 2026-07-24
 
 **Branch:** `main`
 
@@ -151,23 +151,23 @@ Source playlist:
 
 `https://www.youtube.com/playlist?list=PLZ6vahBdAJ3iArMOb5Mrpav98SjW9dsaz`
 
-Current local checkpoint (as of the last committed batch — positions 1–50;
+Current local checkpoint (as of the last committed batch — positions 1–65;
 further batches continue the same loop):
 
 | Measure | Result |
 |---|---:|
 | Playlist entries queued | 121 |
-| Cases captured and transcribed | 50 |
-| Cases awaiting later batches | 71 |
+| Cases captured and transcribed | 65 |
+| Cases awaiting later batches | 56 |
 | Taxonomy | `0.3-workup` |
-| Total passages | 919 |
-| Sponsor passages excluded | 106 |
-| Indexed passages | 813 |
+| Total passages | 1159 |
+| Sponsor passages excluded | 134 |
+| Indexed passages | 1025 |
 | Unlabeled passages | 0 |
 | Curated `passage_overrides` | 31 |
 | Fixed regression score | 5/10 |
 | Calibration score | 8/10 |
-| Cases corroborated (independent source) | 4/50 |
+| Cases corroborated (independent source) | 4/65 |
 | Sponsor leakage | 0 |
 
 The fixed regression score has held at 5/10 as the corpus grew from 20 to 50
