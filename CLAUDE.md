@@ -77,23 +77,38 @@ yt-channel-intelligence/
 ├── evaluations/                  # fixed and expansion retrieval suites
 ├── notebooks/                    # portable topical-analysis notebook
 ├── topics/                       # versioned taxonomy configuration
-├── tests/                        # queue and retrieval-intent tests
+├── corroboration/                # per-case independent-source fact files
+├── tests/                        # queue, retrieval, learning, and phase tests
 ├── agent.py                      # capture CLI for company and topic modes
-├── topic_corpus.py               # topical enrichment/index/query/export CLI
+├── topic_corpus.py               # topical pipeline CLI (see command reference)
 ├── db.py                         # queue, state, retries, and attempt history
 ├── phases/
-│   ├── discover.py
-│   ├── download.py
-│   ├── transcribe.py
-│   ├── synthesize.py
-│   ├── topic.py
-│   ├── topic_enrich.py
-│   ├── topic_export.py
-│   └── topic_retrieval.py
+│   ├── discover.py               # company + topic discovery into the queue
+│   ├── download.py               # audio download workers
+│   ├── transcribe.py             # Whisper transcription
+│   ├── synthesize.py             # company canvas + report
+│   ├── topic.py                  # canonical transcripts + corpus manifest
+│   ├── topic_enrich.py           # chunk, sponsor-mark, label, overrides, aids
+│   ├── topic_intake.py           # draft case configs for new videos (Phase 5)
+│   ├── topic_review.py           # stratified label-audit harness (Phase 2)
+│   ├── topic_retrieval.py        # Chroma index + scoped hybrid query (Phase 2)
+│   ├── topic_synthesis.py        # source-backed cited answers (Phase 4)
+│   ├── topic_learning.py         # case cards, causal chains, matrix (Phase 3)
+│   ├── topic_teaching.py         # LLM teaching notes over cards (Phase 3)
+│   ├── topic_pedagogy.py         # pedagogic evaluation (Phase 3)
+│   ├── topic_corroboration.py    # cross-check a case vs a source (Phase 4)
+│   ├── topic_domain.py           # corpus-wide corroboration + gate (Phase 7)
+│   ├── topic_export.py           # CSV/JSONL/Parquet study files
+│   └── topic_package.py          # portable data-only archive (Phase 6)
 ├── setup.sh / setup.bat          # company workflow setup
-├── setup-topic.sh                # isolated topical environment and kernel
-├── requirements-topic.txt
+├── setup-topic.sh                # topical retrieval env (.venv-topic) + kernel
+├── setup-capture.sh              # capture env (.venv-capture): yt-dlp + Whisper
+├── capture-topic.sh              # resumable batch capture wrapper
+├── batch-1-capture.sh            # batch step 1: capture + draft case configs
+├── batch-2-build.sh              # batch step 2: enrich..evals
+├── requirements-topic.txt / requirements-capture.txt
 ├── reports/                      # ignored generated output
+├── dist/                         # ignored portable archives
 └── .workspace/                   # ignored local corpus and operational state
 ```
 
@@ -114,15 +129,24 @@ repair in Phase 1.
 ## Topical-intelligence workflow
 
 1. Materialize playlist metadata into the durable SQLite queue.
-2. Apply a capture boundary such as `--limit 20`.
+2. Apply a capture boundary such as `--limit 50` (positions up to N).
 3. Download with a small, configurable worker pool and randomized delays.
 4. Transcribe serially by default.
 5. Build canonical Markdown transcripts and a corpus manifest.
-6. Apply sponsor detection plus case- and passage-level labels.
-7. Build a separate Chroma collection for each taxonomy version.
-8. Query with hybrid semantic and taxonomy-aware ranking.
-9. Run fixed and expansion evaluations.
-10. Export CSV, JSONL, and Parquet for notebooks and other analysis tools.
+6. Draft a reviewed `cases:` config per new video (`draft-cases`), then review.
+7. Apply sponsor detection plus case- and passage-level labels (`enrich`).
+8. Build a separate Chroma collection for each taxonomy version (`index`).
+9. Query with scoped hybrid ranking (`query`) or synthesize cited answers
+   (`answer`).
+10. Build the learning layer (`learn`, `teach`) and check it (`evaluate`,
+    `evaluate-learning`).
+11. Corroborate cases against independent sources (`corroborate`) and assess
+    the corpus-wide trust picture (`domain-status`).
+12. Export (`export`) and package a portable archive (`package`).
+
+Growing the corpus is gated per batch: capture and draft (`batch-1-capture.sh`),
+review the drafted configs, then build and evaluate (`batch-2-build.sh`). The
+fixed regression suite must not drift as the corpus grows.
 
 ## Queue and state
 
@@ -164,13 +188,15 @@ counterexamples.
 
 Company mode uses the main Python/system setup described in `SETUP.md`.
 
-Topical retrieval uses `.venv-topic`:
+Topical work uses two environments. If a command touches YouTube or Whisper it
+runs in `.venv-capture`; everything in `topic_corpus.py` runs in `.venv-topic`.
 
 ```bash
-bash setup-topic.sh
+bash setup-capture.sh   # .venv-capture: yt-dlp + Whisper (download/transcribe)
+bash setup-topic.sh     # .venv-topic: chromadb, sentence-transformers, litellm
 ```
 
-The setup also registers the Jupyter kernel:
+`setup-topic.sh` also registers the Jupyter kernel:
 
 ```text
 YT Channel Intelligence (topic)
@@ -195,7 +221,11 @@ Never commit:
 - SQLite databases
 - Chroma indexes
 - generated reports
-- `.venv-topic/`
+- portable archives (`dist/`)
+- `.venv-topic/` and `.venv-capture/`
+
+Corroboration reference files (`corroboration/<slug>/*.yaml`) are the exception:
+they hold public-record facts with source URLs and are committed on purpose.
 
 This repository is public. Treat every staged file as publishable material:
 verify ignored local data, scan for credentials, and review the staged diff

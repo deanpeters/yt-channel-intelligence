@@ -114,16 +114,31 @@ report contract. That is Phase 1.
   expanded corpus.
 - Expansion suites are versioned separately.
 
+### Learning layer, synthesis, and corroboration
+
+- `learn` aggregates the reviewed enrichment into deterministic, source-linked
+  case cards, taxonomy-ordered causal chains, a cross-case pattern matrix, and
+  evidence-gap detection (no LLM calls).
+- `teach` writes LLM teaching notes on top of the cards; every lesson cites a
+  card timestamp, is tagged source-supported or analyst-inference, and
+  citations are validated after generation.
+- `evaluate-learning` runs mechanical pedagogic checks (citation integrity,
+  counterexample coverage, boundary conditions, evidence-gap disclosure,
+  within-corpus pattern recurrence with single-case mechanisms flagged
+  provisional).
+- `answer` synthesizes a cited, inference-labeled answer over scoped retrieval.
+- `corroborate` cross-checks a case against an independent public-record source;
+  `domain-status` aggregates corroboration corpus-wide and gates the
+  "domain intelligence" label on coverage and contradictions.
+
 ### Portable analysis
 
-The export command creates:
-
-- `cases.csv`
-- `case_mechanisms.csv`
-- `passages.csv`
-- `passages.jsonl`
-- `passages.parquet`
-- `export-manifest.json`
+The `export` command creates `cases.csv`, `case_mechanisms.csv`,
+`passages.csv`, `passages.jsonl`, `passages.parquet`, and `export-manifest.json`.
+The `package` command bundles those plus canonical transcripts, taxonomy,
+enrichment, learning artifacts, evaluations, and the notebook into a single
+data-only zip under `dist/` (audio and the Chroma index excluded, no API key
+needed).
 
 The exploration notebook reads these exports rather than SQLite or Chroma. It
 works locally with the registered **YT Channel Intelligence (topic)** kernel
@@ -136,65 +151,97 @@ Source playlist:
 
 `https://www.youtube.com/playlist?list=PLZ6vahBdAJ3iArMOb5Mrpav98SjW9dsaz`
 
-Current local checkpoint:
+Current local checkpoint (as of the last committed batch — positions 1–50;
+further batches continue the same loop):
 
 | Measure | Result |
 |---|---:|
 | Playlist entries queued | 121 |
-| Cases captured and transcribed | 20 |
-| Cases awaiting later batches | 101 |
-| Transcribed words | 73,181 |
+| Cases captured and transcribed | 50 |
+| Cases awaiting later batches | 71 |
 | Taxonomy | `0.3-workup` |
-| Total passages | 388 |
-| Sponsor passages excluded | 54 |
-| Indexed passages | 334 |
+| Total passages | 919 |
+| Sponsor passages excluded | 106 |
+| Indexed passages | 813 |
 | Unlabeled passages | 0 |
+| Curated `passage_overrides` | 31 |
 | Fixed regression score | 5/10 |
-| Twenty-case calibration score | 8/10 |
+| Calibration score | 8/10 |
+| Cases corroborated (independent source) | 4/50 |
 | Sponsor leakage | 0 |
 
-The fixed regression drop is informative: questions originally written around
-three cases are underspecified once twenty valid cases compete for six result
-slots. The next retrieval improvement is explicit query scope or conversational
-case context, not hidden tuning to old expected answers.
+The fixed regression score has held at 5/10 as the corpus grew from 20 to 50
+cases. It is deliberately not tuned to the larger corpus — it is a stable check
+that growth has not broken the original three-case retrieval, not a target.
+Query scope (`--industry`, `--case-role`, `--case`, `--playlist-min/max`) is the
+supported way to narrow retrieval, rather than hidden tuning.
 
-The twenty cases also exposed the need for `case_role`. Crocs is a turnaround
-counterexample and Panda Express is a resilience counterexample; neither should
-be forced into a failure label merely because it appears in the playlist.
+`case_role` distinguishes failures from counterexamples: Crocs is a turnaround
+counterexample, Panda Express and Aldi are resilience counterexamples, American
+Idol is a partial recovery. These must not be forced into failure labels merely
+because they appear in the playlist.
 
-## Reproducible commands
+## Two environments
 
-Capture or safely resume the calibration boundary:
+Topical work uses two separate virtual environments. **Rule of thumb: if a
+command touches YouTube or Whisper it runs in `.venv-capture`; everything else
+runs in `.venv-topic`.**
+
+| Env | Built by | Holds | Used for |
+|---|---|---|---|
+| `.venv-capture` | `setup-capture.sh` | yt-dlp, Whisper, litellm | download + transcribe (`agent.py`, `capture-topic.sh`) |
+| `.venv-topic` | `setup-topic.sh` | chromadb, sentence-transformers, litellm, pandas, pyarrow | everything in `topic_corpus.py` |
+
+## Growing the corpus (the reviewed-batch loop)
+
+Two scripts with one manual review between them. `<N>` is the playlist position
+to capture up to.
 
 ```bash
-python3 agent.py \
-  --mode topic \
-  --topic "Business failures" \
-  --limit 20 \
-  --whisper-model small.en \
-  --download-workers 2 \
-  --download-sleep-min 3 \
-  --download-sleep-max 8 \
-  "https://www.youtube.com/playlist?list=PLZ6vahBdAJ3iArMOb5Mrpav98SjW9dsaz"
+bash batch-1-capture.sh "<playlist-url>" <N>   # capture + draft case configs
+# review reports/topics/<slug>-draft-cases.yaml, paste into topics/<slug>.yaml
+bash batch-2-build.sh                          # enrich, index, learn, teach, evals
 ```
 
-Rebuild derived material without downloading again:
+Watch for two things in the drafted configs before pasting: over-long sponsor
+intervals (a sponsor read is ~30–90s; anything longer is likely wrong and would
+exclude real content) and any `time_period` written as a bare integer.
+
+## `topic_corpus.py` command reference
+
+All run in `.venv-topic`; default `--config topics/business-failures.yaml`.
+
+| Command | What it does | Phase |
+|---|---|---|
+| `draft-cases` | Draft a `cases:` entry per newly captured video (LLM) | 5 |
+| `enrich [--label-with-llm]` | Chunk, sponsor-mark, and label passages into `passages.jsonl` | topical |
+| `index` | Build the Chroma collection from indexable passages | topical |
+| `query <q> [scope flags]` | Retrieve passages (scope by industry/case-role/case/playlist range) | 2 |
+| `answer <q> [scope flags]` | Source-backed, inference-labeled synthesized answer | 4 |
+| `review-sample` / `review-apply` | Stratified label-audit worksheet → `passage_overrides` | 2 |
+| `learn` | Deterministic case cards, causal chains, pattern matrix | 3 |
+| `teach` | LLM teaching notes over the cards (citation-validated) | 3 |
+| `evaluate` / `evaluate --questions ...` | Fixed regression / calibration retrieval suites | topical |
+| `evaluate-learning` | Pedagogic checks over the learning layer | 3 |
+| `corroborate <case>` | Cross-check one case vs an independent source file | 4 |
+| `domain-status` | Aggregate corroboration corpus-wide; data-driven naming gate | 7 |
+| `export` | CSV / JSONL / Parquet study files | topical |
+| `package` | Portable, data-only, API-key-free zip archive | 6 |
+
+Rebuild the derived layers from scratch without re-downloading:
 
 ```bash
-bash setup-topic.sh
-.venv-topic/bin/python topic_corpus.py enrich
+.venv-topic/bin/python topic_corpus.py enrich --label-with-llm
 .venv-topic/bin/python topic_corpus.py index
-.venv-topic/bin/python topic_corpus.py export
-```
-
-Run evaluations:
-
-```bash
+.venv-topic/bin/python topic_corpus.py learn
+.venv-topic/bin/python topic_corpus.py teach
 .venv-topic/bin/python topic_corpus.py evaluate
-.venv-topic/bin/python topic_corpus.py evaluate \
-  --questions evaluations/business-failures-calibration-questions.yaml \
-  --output reports/topics/business-failures-calibration-evaluation.md
+.venv-topic/bin/python topic_corpus.py evaluate-learning
 ```
+
+Corroboration references live in `corroboration/<slug>/<video-id>.yaml`
+(committed, public-fact sources). Per-case corroboration results and the domain
+status report are rebuildable local artifacts.
 
 ## Durable and disposable artifacts
 
@@ -221,16 +268,30 @@ Run evaluations:
 - Retrieval evaluation measures expected coverage, not ultimate truth.
 - The company sample report is behind the current evidence contract.
 
-## Approved next sequence
+## Phase status
 
-1. Phase 1: repair and validate the company sample report.
-2. Phase 2: review topical labels and add query scope.
-3. Phase 3: create case cards, causal chains, pattern matrices, teaching notes,
-   and pedagogic evaluations.
-4. Phase 4: add source-backed synthesis and a second-source pilot.
-5. Phase 5: capture positions 21–35, review, then continue in gated batches.
-6. Phase 6: improve portable archives and notebook surfaces.
-7. Phase 7: extend the proven workflow into domain intelligence.
+| Phase | Status |
+|---|---|
+| 0 — Document and checkpoint | Complete |
+| 1 — Repair company sample report | Not started (independent track) |
+| 2 — Review labels and add query scope | Complete |
+| 3 — Learning layer (cards, chains, matrix, teaching, pedagogic evals) | Complete |
+| 4 — Source-backed synthesis and corroboration pilot | Complete |
+| 5 — Expand through reviewed batches | In progress (50/121 captured; loop proven) |
+| 6 — Portable study surfaces | Complete |
+| 7 — Domain intelligence | Started (corpus-wide corroboration + gate; cross-channel ingestion still to do) |
+
+## What a new maintainer should pick up next
+
+- **Finish Phase 5:** run the two-script batch loop for the remaining playlist
+  positions (71 videos, ~5 batches). Each batch keeps the fixed regression at
+  5/10 and needs a review of the drafted case configs before pasting.
+- **Advance Phase 7:** add corroboration references for more cases to raise
+  coverage, resolve or annotate the contradictions `domain-status` surfaces,
+  and — the real frontier — ingest a second source channel so corroboration is
+  genuinely cross-channel rather than corpus-vs-public-record.
+- **Phase 1 (independent):** repair the company sample report to the evidence
+  contract.
 
 See `ROADMAP.md` for acceptance gates and
 `docs/topical-intelligence/scale-and-learning-plan.md` for the batching,

@@ -48,22 +48,38 @@ retrieval pipeline; they share capture infrastructure but serve different jobs.
 
 ## Current topical checkpoint
 
-The business-failures calibration corpus currently contains:
+The business-failures corpus currently contains (as of positions 1–50; batches
+continue toward the full 121-entry playlist):
 
-- 121 playlist entries in the durable queue
-- 20 captured and transcribed cases; 101 awaiting later batches
-- taxonomy `0.3-workup`
-- 388 labeled passages
-- 54 sponsor passages excluded
-- 334 passages in Chroma
+- 121 playlist entries in the durable queue; 50 captured and transcribed
+- taxonomy `0.3-workup`, 31 curated `passage_overrides`
+- 919 labeled passages, 106 sponsor passages excluded, 813 in Chroma
 - 0 unlabeled passages
-- fixed retrieval regression: 5/10
-- twenty-case calibration suite: 8/10
+- fixed retrieval regression 5/10, calibration 8/10 (stable across corpus growth)
+- 4/50 cases corroborated against an independent source
 
-Do not capture videos 21–35 until the Phase 2 and Phase 3 learning gates in
-`ROADMAP.md` are complete.
+Phases 2, 3, 4, 6 are complete; Phase 5 is in progress (the reviewed-batch loop
+is proven); Phase 7 has started (corpus-wide corroboration and a data-driven
+naming gate; cross-channel ingestion still to do). See `docs/current-state.md`
+for the authoritative phase status and command reference.
+
+## Two environments
+
+Topical work uses two virtual environments. If a command touches YouTube or
+Whisper it runs in `.venv-capture` (built by `setup-capture.sh`); everything in
+`topic_corpus.py` runs in `.venv-topic` (built by `setup-topic.sh`).
+
+To grow the corpus, use the two-step batch loop:
+
+```bash
+bash batch-1-capture.sh "<playlist-url>" <up-to-position>   # capture + draft
+# review reports/topics/<slug>-draft-cases.yaml, paste into topics/<slug>.yaml
+bash batch-2-build.sh                                        # enrich..evals
+```
 
 ## Useful verification commands
+
+For any code or architecture change:
 
 ```bash
 python3 -m compileall -q agent.py db.py phases topic_corpus.py
@@ -71,17 +87,19 @@ python3 -m unittest discover -s tests -v
 git diff --check
 ```
 
-Topical checks:
+For topical changes, also rebuild the affected derived layer and run both
+retrieval suites plus the pedagogic evaluation when the local corpus is present:
 
 ```bash
-bash setup-topic.sh
-.venv-topic/bin/python topic_corpus.py enrich
+.venv-topic/bin/python topic_corpus.py enrich --label-with-llm
 .venv-topic/bin/python topic_corpus.py index
-.venv-topic/bin/python topic_corpus.py export
+.venv-topic/bin/python topic_corpus.py learn
+.venv-topic/bin/python topic_corpus.py teach
 .venv-topic/bin/python topic_corpus.py evaluate
 .venv-topic/bin/python topic_corpus.py evaluate \
   --questions evaluations/business-failures-calibration-questions.yaml \
   --output reports/topics/business-failures-calibration-evaluation.md
+.venv-topic/bin/python topic_corpus.py evaluate-learning
 ```
 
 The local corpus lives under `.workspace/` and is intentionally uncommitted.
