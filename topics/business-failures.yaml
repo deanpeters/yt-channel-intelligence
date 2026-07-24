@@ -1326,6 +1326,270 @@ cases:
       - {start: 67, end: 89, sponsor: Quo}
       - {start: 268, end: 310, sponsor: Quo}
 
+  # --- Batch 5 (playlist positions 66-80), drafted then reviewed ---
+  jhfMYaHFA40:
+    subject: Atari
+    case_role: failure
+    subject_type: company
+    industry: technology
+    geography: United States
+    time_period: 1972-1984
+    failure_states:
+      - bankruptcy
+      - sales_decline
+      - identity_or_reputation_coupling
+    failure_mechanisms:
+      - ownership_or_portfolio_neglect
+      - quality_or_value_erosion
+      - strategic_drift
+    sponsor_intervals:
+      - {start: 436, end: 437, sponsor: girdly.com}
+  UIrCdRiwXzI:
+    subject: Ford F150 Lightning
+    case_role: failure
+    subject_type: product_brand
+    industry: automotive
+    geography: United States
+    time_period: 2021-2025
+    failure_states:
+      - sales_decline
+      - market_exit
+      - product_reputation_loss
+    failure_mechanisms:
+      - cost_structure_mismatch
+      - quality_or_value_erosion
+      - market_or_demographic_shift
+    sponsor_intervals:
+      - {start: 375, end: 376, sponsor: girdly.com}
+  IdN3E--LLms:
+    subject: iRobot
+    case_role: failure
+    subject_type: company
+    industry: technology
+    geography: Global
+    time_period: 1990-2026
+    failure_states:
+      - bankruptcy
+      - sales_decline
+      - market_share_loss
+    failure_mechanisms:
+      - strategic_drift
+      - cost_structure_mismatch
+      - capability_erosion
+      - market_or_demographic_shift
+    sponsor_intervals:
+      - {start: 20, end: 40, sponsor: Fabric by Gerber Life}
+      - {start: 314, end: 374, sponsor: Fabric by Gerber Life}
+  WkZ9rpwilWU:
+    subject: CarMax
+    case_role: failure
+    subject_type: company
+    industry: retail
+    geography: United States
+    time_period: 1990-2026
+    failure_states:
+      - sales_decline
+      - stock_crash
+      - leadership_change
+    failure_mechanisms:
+      - market_or_demographic_shift
+      - capability_erosion
+      - strategic_drift
+    sponsor_intervals:
+      - {start: 320, end: 340, sponsor: girdly.com}
+  n2mlewMn53E:
+    subject: LEGO
+    case_role: turnaround_counterexample
+    subject_type: company
+    industry: toys
+    geography: Global
+    time_period: 1990-2023
+    failure_states:
+      - bankruptcy
+      - sales_decline
+    failure_mechanisms:
+      - strategic_drift
+      - mission_loss
+      - ownership_or_portfolio_neglect
+    sponsor_intervals: []
+  IAJNwOXL4aM:
+    subject: Red Lobster
+    case_role: failure
+    subject_type: company
+    industry: restaurants
+    geography: United States
+    time_period: 1968-2024
+    failure_states:
+      - bankruptcy
+      - sales_decline
+      - quality_or_value_erosion
+    failure_mechanisms:
+      - ownership_or_portfolio_neglect
+      - incentive_misalignment
+      - financial_leverage
+      - quality_or_value_erosion
+      - market_or_demographic_shift
+    sponsor_intervals: []
+  FV36Z9WFZ7g:
+    subject: Kodak Corporation
+    case_role: failure
+    subject_type: company
+    industry: photography
+    geography: United States
+    time_period: 1874-2012
+    failure_states:
+      - bankruptcy
+      - sales_decline
+      - market_share_loss
+    failure_mechanisms:
+      - incentive_misalignment
+      - strategic_drift
+      - short_term_optimization
+      - cost_structure_mismatch
+    sponsor_intervals: []
+  xnOURogQdLs:
+    subject: Juul
+    case_role: failure
+    subject_type: company
+    industry: vaping
+    geography: United States
+    time_period: 2000-2023
+    failure_states:
+      - market_share_loss
+      - lawsuits
+      - regulatory_investigations
+      - reputation_damage
+    failure_mechanisms:
+      - mission_loss
+      - governance_failure
+      - stakeholder_betrayal
+      - normalization_of_deviance
+    sponsor_intervals:
+      - {start: 404, end: 447, sponsor: sponsor}
+  oz_Ha-zqAps:
+    subject: Fitbit
+    case_role: decline
+    subject_type: company
+    industry: technology
+    geography: Global
+    time_period: 2007-2024
+    failure_states:
+      - sales_decline
+      - market_share_loss
+      - product_flop
+    failure_mechanisms:
+      - strategic_drift
+      - market_or_demographic_shift
+      - cost_structure_mismatch
+      - failed_transformation
+    sponsor_intervals:
+      - {start: 267, end: 328, sponsor: Nier}
+  PlnwPqykLgw:
+    subject: DeLorean Motor Corporation
+    case_role: failure
+    subject_type: company
+    industry: automotive
+    geography: Global
+    time_period: 1975-1982
+    failure_states:
+      - bankruptcy
+      - quality_or_value_erosion
+      - sales_decline
+    failure_mechanisms:
+      - strategic_drift
+      - cost_structure_mismatch
+      - stakeholder_betrayal
+    sponsor_intervals:
+      - {start: 291, end: 337, sponsor: sponsor}
+  8TxejObY0eE:
+    subject: Skype
+    case_role: failure
+    subject_type: product_brand
+    industry: technology
+    geography: Global
+    time_period: 2003-2025
+    failure_states:
+      - sales_decline
+      - market_share_loss
+      - identity_crisis
+    failure_mechanisms:
+      - unclear_positioning
+      - strategic_drift
+      - failed_transformation
+    sponsor_intervals:
+      - {start: 23, end: 24, sponsor: Hostinger}
+      - {start: 541, end: 562, sponsor: Hostinger}
+  2CS_QlhHxPA:
+    subject: Southwest Airlines
+    case_role: decline
+    subject_type: company
+    industry: airlines
+    geography: United States
+    time_period: 1960-2026
+    failure_states:
+      - cancellation_crisis
+      - market_share_loss
+      - profit_decline
+    failure_mechanisms:
+      - strategic_drift
+      - capability_erosion
+      - normalization_of_deviance
+    sponsor_intervals:
+      - {start: 22, end: 24, sponsor: High Level}
+  Rr2HU_9OOZ8:
+    subject: Boston Market
+    case_role: failure
+    subject_type: company
+    industry: restaurants
+    geography: United States
+    time_period: 1985-2024
+    failure_states:
+      - bankruptcy
+      - sales_decline
+      - franchise_failures
+    failure_mechanisms:
+      - financial_leverage
+      - incentive_misalignment
+      - overexpansion_or_overcapacity
+      - quality_or_value_erosion
+    sponsor_intervals:
+      - {start: 23, end: 45, sponsor: Zapier}
+      - {start: 251, end: 315, sponsor: Zapier}
+  K_t-PvS38Ik:
+    subject: Bud Light
+    case_role: failure
+    subject_type: product_brand
+    industry: beer
+    geography: United States
+    time_period: 1975-2024
+    failure_states:
+      - sales_decline
+      - identity_or_reputation_coupling
+    failure_mechanisms:
+      - market_or_demographic_shift
+      - ownership_or_portfolio_neglect
+      - mission_loss
+    sponsor_intervals:
+      - {start: 23, end: 47, sponsor: NEAR}
+      - {start: 640, end: 683, sponsor: NEAR}
+  GVBfKnvz0Pg:
+    subject: NFTs
+    case_role: failure
+    subject_type: market_ecosystem
+    industry: technology
+    geography: Global
+    time_period: 2017-2025
+    failure_states:
+      - sales_decline
+      - loss_of_trust
+      - market_collapse
+    failure_mechanisms:
+      - quality_or_value_erosion
+      - fraud_or_asset_misappropriation
+      - market_or_demographic_shift
+    sponsor_intervals:
+      - {start: 452, end: 473, sponsor: Incogni}
+
 passage_overrides:
   CU3xYnICJ0s-000167-000230:
     add_failure_mechanisms: [short_term_optimization]
